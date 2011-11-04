@@ -15,7 +15,8 @@
 #    (c) 2011 by Hannes Georg
 #
 
-gem 'uri_template'
+#gem 'uri_template'
+$LOAD_PATH << File.expand_path('../../uri_template7/lib',File.dirname(__FILE__))
 require 'uri_template'
 
 # Addressive is library which should make it possible for different rack-applications to live together on the same server.
@@ -27,7 +28,7 @@ require 'uri_template'
 # What needs to be done by the apps:
 #   - Provide uri templates.
 #
-module Addressive
+class Addressive < Struct.new(:node,:action,:variables, :spec)
 
   # This error is raised whenever no uri spec could be found.
   class NoURISpecFound < StandardError
@@ -41,8 +42,74 @@ module Addressive
   
   end
 
+  module URIBuilder
+  
+    def self.new(*args)
+      URIBuilderClass.new(*args)
+    end
+  
+    def derive_uri_builder(action, variables, node)
+      origin = self.origin rescue nil
+      return URIBuilderClass.new( origin, action, variables, node )
+    end
+    
+    protected :derive_uri_builder
+  
+    # Creates a new URIBuilder with the given arguments.
+    # Given Hashes are merged into the variables. The last symbol is used to determine the action. Everything else is used to traverse the node graph.
+    # 
+    # @example
+    #   node = Addressive::Node.new
+    #   node.uri_spec(:show) << Addressive::URISpec.new( URITemplate.new('/an/uri/with/{var}') )
+    #   bldr = Addressive::URIBuilder.new(node)
+    #   bldr.uri(:show, 'var'=>'VAR!').to_s #=> '/an/uri/with/VAR%21'
+    #
+    # @return URIBuilder
+    def uri(*args)
+      hashes, path = args.partition{|x| x.kind_of? Hash}
+      node = self.node
+      action = self.action
+      if path.size >= 1
+        node = node.traverse(*path[0..-2])
+        action = path.last
+      end
+      derive_uri_builder(action, hashes.inject(self.variables || {}, &:merge), node)
+    end
+  
+    # Actually creates the URI as a string
+    #
+    # @return String
+    def to_s
+      specs = self.uri_builder_specs
+      # if a.none? ????
+      if specs.none?
+        raise NoURISpecFound.new(self)
+      end
+      return specs.first.template.expand(self.variables || {}).to_s
+    end
+    
+    def humanization_key
+      specs = self.uri_builder_specs
+      if specs.none?
+        return super
+      else
+        return specs.first.app._(:action,self.action,self.variables || {} )
+      end
+    end
+    
+    def uri_builder_specs
+      return @specs ||= begin
+        varnames = (self.variables || {} ).keys
+        self.node.uri_spec(self.action).select{|s| s.valid? and (s.variables - varnames).none? }.sort_by{|s| (varnames - s.variables).size }
+      end
+    end
+  
+  end
+
   # A builder which creates uri based on a Node an action and some variables.
-  class URIBuilder
+  class URIBuilderClass
+  
+    include URIBuilder
 
     attr_reader :origin,:node,:variables,:action
 
@@ -52,55 +119,20 @@ module Addressive
       @action = action
       @variables = vars
     end
-  
-    # Creates a new URIBuilder with the given arguments.
-    # Given Hashes are merged into the variables. The last symbol is used to determine the action. Everything else is used to traverse the node graph.
-    # 
-    # @example
-    #   node = Addressive::Node.new
-    #   node.uri_spec(:show) << '/an/uri/with/{var}'
-    #   bldr = Addressive::URIBuilder.new(node)
-    #   bldr.uri(:show, 'var'=>'VAR!').to_s #=> '/an/uri/with/VAR%21'
-    #
-    # @return URIBuilder
-    def uri(*args)
-      hashes, path = args.partition{|x| x.kind_of? Hash}
-      node = @node
-      action = @action
-      if path.size >= 1
-        node = node.traverse(*path[0..-2])
-        action = path.last
-      end
-      URIBuilder.new(@origin, action, hashes.inject(@variables, &:merge), node)
-    end
-
-    # @private
-    alias to_s_without_uri to_s
-  
-    # Actually creates the URI as a string
-    #
-    # @return String
-    def to_s
-      varnames = @variables.keys
-      specs = @node.uri_spec(@action).select{|spec| spec.valid?}.sort_by{|s| (s.variables & varnames).size }
-      # if a.none? ????
-      if specs.none?
-        raise NoURISpecFound.new(self)
-      end
-      return specs.last.template.expand(@variables).to_s
-    end
     
     # @private
     def inspect
-      '<URIBuilder '+ @node.inspect+' '+@action.inspect+' '+@variables.inspect+'>'
+      '<URIBuilder '+self.action.inspect+' '+self.variables.inspect+'>'
     end
 
   end
   
+  require 'ostruct'
+  
   # A specification is a combination of an URI template and some meta-data ( like the app this spec belongs to ).
-  class URISpec
+  class URISpec < OpenStruct
     
-    attr_reader :template, :options
+    attr_accessor :template
     
     def valid?
       !!@template
@@ -110,73 +142,78 @@ module Addressive
       @template ? @template.variables : []
     end
     
-    def pattern
-      @options['pattern']
-    end
-    
-    def app
-      @options['app']
-    end
-    
-    def app=(app)
-      @options['app']=app
-    end
-    
-    def initialize(options)
-      @options = options
-      if options['template'].kind_of? URITemplate
-        @template = options['template']
-        @options['pattern'] = @template.pattern
-        #@options['type'] = @template.type
-      elsif options['pattern']
-        begin
-          @template = URITemplate.new(options['pattern'],options.fetch('type',:default).to_sym)
-        rescue URITemplate::Invalid => ex
-          @error = ex.message
-          @template = nil
-        end
-      end
-    end
-    
-    def [](key)
-      return @options[key]
-    end
-    
-    def export
-      return @options
+    def initialize(template, *args)
+      @template = template
+      super(*args)
     end
     
   end
   
-  class URISpecList
+  # A URISpecFactory contains all information necessary to create a URISpec.
+  # This class exists because it's annoying to pass around default values by hand and
+  # a factory makes it possible to apply post-processing options.
+  class URISpecFactory
   
-    include Enumerable
-  
-    def self.converter(defaults)
+    def converter(defaults = self.all_defaults)
       lambda{|spec|
         if spec.kind_of? URISpec
-          spec
+          [ normalize( spec.dup, defaults ) ]
         elsif spec.kind_of? URITemplate
-          URISpec.new( defaults.merge('template'=>spec) )
+          [ normalize( URISpec.new( spec ) , defaults) ]
         elsif spec.kind_of? String
-          URISpec.new( defaults.merge('pattern'=>spec) )
+          [ normalize( URISpec.new( URITemplate.new(spec) ) , defaults) ]
         elsif spec.kind_of? Array
           spec.map(&self.converter(defaults))
         elsif spec.kind_of? Hash
           nd = defaults.merge(spec)
-          self.converter(nd).call(nd['pattern'])
+          self.converter(nd).call(nd[:template])
         else
           []
         end
       }
     end
     
-    def convert(*args)
-      args.map(&self.class.converter(@defaults)).flatten
+    protected :converter
+  
+    def normalize( spec, defaults = self.all_defaults )
+      if defaults.key? :app 
+        spec.app = defaults[:app]
+      end
+      if defaults[:prefix]
+        spec.template = URITemplate.apply( defaults[:prefix] , :/ ,  spec.template)
+      end
+      return spec
     end
   
-    def initialize(defaults, source = [])
+    attr_reader :defaults
+    
+    def initialize(defaults, parent = nil)
       @defaults = defaults
+      @parent = parent
+    end
+    
+    def convert(*args)
+      args.map(&converter).flatten
+    end
+    
+    alias << convert
+    
+    def all_defaults
+      @parent ? @parent.all_defaults.merge(defaults) : defaults
+    end
+    
+    def derive(nu_defaults)
+      self.class.new(nu_defaults, self)
+    end
+  
+  end
+  
+  # A list of {URISpec}s. Useful because it checks the input.
+  class URISpecList
+  
+    include Enumerable
+  
+    def initialize(factory, source = [])
       @specs = [] 
       self.<<(*source)
     end
@@ -186,7 +223,10 @@ module Addressive
     end
     
     def <<(*args)
-      @specs.push( *convert(args) )
+      args = args.flatten
+      fails = args.select{|a| !a.kind_of? URISpec }
+      raise "Expected to receive only URISpecs but, got #{fails.map(&:inspect).join(', ')}" if fails.size != 0
+      @specs.push( *args )
     end
     
     alias push <<
@@ -215,7 +255,6 @@ module Addressive
     def initialize
       @edges = {}
       @meta = {}
-      @defaults = {}
       @apps = []
       @uri_specs = Hash.new{|hsh,name| hsh[name]=URISpecList.new(@defaults) }
     end
@@ -251,20 +290,12 @@ module Addressive
       URIBuilder.new(self).uri(*args)
     end
     
-    def export
-      return {'meta'=>meta,
-        'defaults'=>defaults,
-        'uri_specs'=>Hash[ *@uri_specs.map{|k,v| [k.to_s,v.export] }.select{|k,v| v.any? }.flatten(1) ]
-      }
-    end
-    
-    def import(data)
-      @meta.update(data.fetch('meta',{}))
-      @defaults.update(data.fetch('defaults',{}))
-      data.fetch('uri_specs',{}).map{|k,v|
-        uri_spec(k.to_sym) << v
-      }
-      
+    def inspect
+      if @meta['name']
+        return "<#{self.class.name}: #{@meta['name']}>"
+      else
+        super
+      end 
     end
   
   end
@@ -278,15 +309,21 @@ module Addressive
     class AppBuilder
     
       # @private
-      def initialize(node, app)
+      def initialize(node, factory, app)
         @node = node
         @app = app
+        @spec_factory = factory
+      end
+      
+      # Sets a default value for an option.
+      def default(name, value)
+        @spec_factory.defaults[name] = value
       end
       
       # Adds one or more uri specs for a given name. It uses the current app as the default app for all specs.
       def uri(name,*args)
         specs = @node.uri_spec(name)
-        specs << specs.convert(*args).each{|spec| spec.app = @app }
+        specs << @spec_factory.convert(*args)
         return specs
       end
     
@@ -302,6 +339,7 @@ module Addressive
       def initialize(network,node)
         @network = network
         @node = node
+        @spec_factory = network.spec_factory.derive({})
       end
       
       # Adds an edge from the current node to a node with the given name.
@@ -337,12 +375,12 @@ module Addressive
       
       # Sets a default value for an option.
       def default(name, value)
-        @node.defaults[name] = value
+        @spec_factory.defaults[name] = value
       end
       
       # Adds one or more uri specs for a given name.
       def uri(name,*args)
-        @node.uri_spec(name).<<(*args)
+        @node.uri_spec(name) << @spec_factory.convert(args)
         return @node.uri_spec(name)
       end
       
@@ -370,22 +408,19 @@ module Addressive
       # @return {AppBuilder}
       def app(app, options = {}, &block)
         app = app.to_app if app.respond_to? :to_app
-        unless @node.apps.include? app
-          @node.apps << app
-          if app.respond_to? :generate_uri_specs
-          puts app.generate_uri_specs(options).inspect
-            app.generate_uri_specs(options).each do |k,v|
-              specs = @node.uri_spec(k)
-              specs << specs.convert(v).each{|spec| spec.app ||= app }
-            end
-          end
-        end
-        builder = AppBuilder.new(@node,app)
+        sf = @spec_factory.derive(options.merge(:app=>app))
+        builder = AppBuilder.new(@node,sf,app)
         if block
           if block.arity == 1
             yield builder
           else
             builder.instance_eval(&block)
+          end
+        end
+        unless @node.apps.include? app
+          @node.apps << app
+          if app.respond_to? :generate_uri_specs
+            app.generate_uri_specs(builder)
           end
         end
         return builder
@@ -425,19 +460,18 @@ module Addressive
       #   Only nodes created after this default has been set will receive this value.
       #
       def default(name,value)
-        @network.defaults[name]=value
+        @network.spec_factory.defaults[name]=value
       end
     
     end
     
     # @private
     def configure(node)
-      node.defaults.update(@defaults)
       return node
     end
 
     # @private
-    attr_reader :node_class, :node_builder_class, :defaults
+    attr_reader :node_class, :node_builder_class, :spec_factory
     
     # Creates a new Network.
     # @yield {Builder}
@@ -445,6 +479,7 @@ module Addressive
       @defaults = {}
       @node_class = Class.new(Node)
       @node_builder_class = Class.new(NodeBuilder)
+      @spec_factory = URISpecFactory.new({})
       @nodes = Hash.new{|hsh, name| hsh[name] = configure(node_class.new) }
       build(&block)
     end
@@ -475,51 +510,94 @@ module Addressive
   
   end
   
+  def Network(&block)
+    return Network.new(&block)
+  end
+  
+  alias graph Network
+
+  include URIBuilder
+  
+=begin
+  # Later ...
+  class Request < Rack::Request
+  
+    def GET
+      if @env['addressive']
+        return @env['addressive'].variables
+      else
+        super
+      end
+    end
+    
+    def uri(*args)
+      if @env['addressive']
+        @env['addressive'].uri(*args)
+      else
+        self.url
+      end
+    end
+    
+  end
+=end
+  
   # A router which can be used as a rack application and routes requests to nodes and their apps.
   #
   class Router
   
-    attr_reader :routes
+    attr_reader :routes, :actions
   
     def initialize()
       @routes = []
+      @actions = {}
     end
     
     # Add a nodes specs to this router.
     def add(node)
       node.uri_specs.each do |action, specs|
         specs.each do |spec|
-          if spec.valid? and spec.app and spec.options.fetch('route',true)
-            @routes << [node, action, spec]
+          if spec.valid? and spec.app and spec.route != false
+            @routes << spec
+            @actions[spec] = [node, action]
           end
         end
       end
+      @routes.sort_by!{|spec| spec.template.static_characters }.reverse!
     end
     
     # Routes the env to an app and it's node.
     def call(env)
-      path = env['PATH_INFO']
+      path = env['PATH_INFO'] + (env['QUERY_STRING'].to_s.length > 0 ? '?'+env['QUERY_STRING'] : '')
       best_match = nil
       best_size = 1.0 / 0
-      @routes.each{|node, action, spec|
-        spec.template.extract(path){ |vars|
-          if vars.size < best_size
-            best_match = {variables: vars, node: node, spec: spec, action: action}
-            best_size = vars.size
-          end
-        }
-      }
-      if best_match
-        return best_match[:spec].app.call(env.merge({'addressive'=>best_match}))
-      else
+      l = env['rack.logger']
+      if l
+        l.debug('Addressive') do
+          "### Start: #{path.inspect}"
+        end
+      end
+      matches = @routes.to_enum.map{|spec| [spec, spec.template.extract(path)] }.reject{|_,v| v.nil?}
+      if matches.empty?
         return not_found(env)
+      else
+        if l
+          l.debug('Addressive') do
+            matches.each do |spec,variables|
+              "# found: #{spec.template.pattern.inspect} with #{variables.inspect}"
+            end
+          end
+        end
+        spec, variables = matches.first
+        node, action = @actions[spec]
+        env['addressive']=Addressive.new(node, action, variables, spec)
+        return spec.app.call(env)
       end
     end
   
     # This method is called when no route was found.
     # You may override this as you wish.
     def not_found(env)
-      [404,{},['']]
+      [404,{'Content-Type'=>'text/plain'},['Ooooopppps 404!']]
     end
     
     # @private

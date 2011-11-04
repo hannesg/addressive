@@ -76,23 +76,6 @@ describe Addressive do
   
   end
   
-  describe Addressive::Node do
-  
-    it "should be exportable" do
-    
-      node_a = Addressive::Node.new
-      node_a.uri_spec(:show) << {'pattern'=>'/arg_a/{arg_a}','public'=>true}
-      
-      node_b = Addressive::Node.new
-      node_b.import( node_a.export )
-      
-      node_b.uri_spec(:show).should have(1).item
-      node_b.uri_spec(:show).first.template.should == node_a.uri_spec(:show).first.template
-      
-    end
-  
-  end
-  
   describe Addressive::URIBuilder do
   
     it "should be able to select a spec" do
@@ -156,8 +139,12 @@ describe Addressive do
         return [ @name, env['addressive'] ]
       end
 
-      def generate_uri_specs(options)
-        return {:show=> [options.fetch(:prefix,'') + '/show/{x}',options.fetch(:prefix,'') + '/{x}'],:new=> options.fetch(:prefix,'') + '/new' }
+      def generate_uri_specs(builder)
+      
+        builder.uri :show, '/show/{x}', '/{x}'
+      
+        builder.uri :new, '/new'
+      
       end
 
       def to_app
@@ -197,38 +184,39 @@ describe Addressive do
       }[:frontend]
       
       router = Addressive::Router.new
+      
       router.add(nd)
       router.add(nd.edges[:backend])
       
-      name, addressive = router.call({'PATH'=>'/app_a/show/3'})
+      name, addressive = router.call({'PATH_INFO'=>'/app_a/show/3'})
       name.should == 'A'
-      addressive.should be_kind_of(Hash)
+      addressive.should be_kind_of(Addressive)
       addressive[:node].should == nd
       addressive[:variables].should == {'x'=>'3'}
     
-      name, addressive = router.call({'PATH'=>'/backend/show/5'})
+      name, addressive = router.call({'PATH_INFO'=>'/backend/show/5'})
       name.should == 'C'
       addressive[:node].should == nd.edges[:backend]
       addressive[:variables].should == {'x'=>'5'}
       
-      name, addressive = router.call({'PATH'=>'/backend/new'})
+      name, addressive = router.call({'PATH_INFO'=>'/backend/new'})
       name.should == 'C'
       addressive[:node].should == nd.edges[:backend]
       addressive[:action].should == :new
       
-      name, addressive = router.call({'PATH'=>'/backend/newz'})
+      name, addressive = router.call({'PATH_INFO'=>'/backend/newz'})
       name.should == 'C'
       addressive[:node].should == nd.edges[:backend]
       addressive[:variables].should == {'x'=>'newz'}
       addressive[:action].should == :show
     
-      name, addressive = router.call({'PATH'=>'/backend/do/5'})
+      name, addressive = router.call({'PATH_INFO'=>'/backend/do/5'})
       name.should == 'D'
       addressive[:node].should == nd.edges[:backend]
       addressive[:variables].should == {'y'=>'do','x'=>'5'}
       addressive[:action].should == :show
       
-      name, addressive = router.call({'PATH'=>'/backend/do/new'})
+      name, addressive = router.call({'PATH_INFO'=>'/backend/do/new'})
       name.should == 'D'
       addressive[:node].should == nd.edges[:backend]
       addressive[:variables].should == {'y'=>'do'}
