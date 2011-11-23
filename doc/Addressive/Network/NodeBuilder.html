@@ -1,0 +1,612 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Addressive::Network::NodeBuilder
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '../..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (N)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../../Addressive.html" title="Addressive (class)">Addressive</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Network.html" title="Addressive::Network (class)">Network</a></span></span>
+     &raquo; 
+    <span class="title">NodeBuilder</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Addressive::Network::NodeBuilder
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Addressive::Network::NodeBuilder</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">lib/addressive.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+A NodeBuilder is used to build a Node inside a Network. This class should
+not be generated directly, it&#8217;s created for you by <span class='object_link'><a href="Builder.html#node-instance_method" title="Addressive::Network::Builder#node (method)">Builder#node</a></span>.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#node-instance_method" title="#node (instance method)">- (Object) <strong>node</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title readonly">readonly</span>
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns the value of attribute node.
+</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#app-instance_method" title="#app (instance method)">- (AppBuilder) <strong>app</strong>(app, options = {}) {|AppBuilder| ... }</a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Adds an rack-application to this node.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#default-instance_method" title="#default (instance method)">- (Object) <strong>default</strong>(name, value) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Sets a default value for an option.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#edge-instance_method" title="#edge (instance method)">- (Object) <strong>edge</strong>(as, name = as) { ... }</a>
+    
+
+    
+      (also: #ref)
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Adds an edge from the current node to a node with the given name.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#uri-instance_method" title="#uri (instance method)">- (Object) <strong>uri</strong>(name, *args) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Adds one or more uri specs for a given name.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <span id="node-instance_method"></span>
+      <div class="method_details first">
+  <p class="signature first" id="node-instance_method">
+  
+    - (<tt>Object</tt>) <strong>node</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns the value of attribute node
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+361
+362
+363</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 361</span>
+
+<span class='kw'>def</span> <span class='id node'>node</span>
+  <span class='ivar'>@node</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="app-instance_method">
+  
+    - (<tt><span class='object_link'><a href="AppBuilder.html" title="Addressive::Network::AppBuilder (class)">AppBuilder</a></span></tt>) <strong>app</strong>(app, options = {}) {|AppBuilder| ... }
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Adds an rack-application to this node.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <h3>Examples:</h3>
+    
+      <h4><div class='inline'></div></h4>
+      <pre class="example code">
+<span class='const'>Addressive</span><span class='op'>::</span><span class='const'>Network</span><span class='period'>.</span><span class='id new'>new</span><span class='lbrace'>{</span>
+
+  <span class='id node'>node</span> <span class='symbol'>:a_node</span> <span class='kw'>do</span>
+
+    <span class='id app'>app</span> <span class='id lambda'>lambda</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id env'>env</span><span class='op'>|</span> <span class='lbracket'>[</span><span class='int'>200</span><span class='comma'>,</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>App 1</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span><span class='rbracket'>]</span><span class='rbrace'>}</span> <span class='kw'>do</span>
+      <span class='id uri'>uri</span> <span class='symbol'>:show</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>/a_node/app1</span><span class='tstring_end'>'</span></span>
+    <span class='kw'>end</span>
+
+    <span class='id app'>app</span> <span class='id lambda'>lambda</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id env'>env</span><span class='op'>|</span> <span class='lbracket'>[</span><span class='int'>200</span><span class='comma'>,</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>App 2</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span><span class='rbracket'>]</span><span class='rbrace'>}</span> <span class='kw'>do</span>
+      <span class='id uri'>uri</span> <span class='symbol'>:show</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>/a_node/app2</span><span class='tstring_end'>'</span></span>
+    <span class='kw'>end</span>
+
+  <span class='kw'>end</span>
+
+<span class='rbrace'>}</span></pre>
+    
+  </div>
+
+<h3>Yields:</h3>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="AppBuilder.html" title="Addressive::Network::AppBuilder (class)">AppBuilder</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<h3>Returns:</h3>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="AppBuilder.html" title="Addressive::Network::AppBuilder (class)">AppBuilder</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 434</span>
+
+<span class='kw'>def</span> <span class='id app'>app</span><span class='lparen'>(</span><span class='id app'>app</span><span class='comma'>,</span> <span class='id options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='id app'>app</span> <span class='op'>=</span> <span class='id app'>app</span><span class='period'>.</span><span class='id to_app'>to_app</span> <span class='kw'>if</span> <span class='id app'>app</span><span class='period'>.</span><span class='id respond_to?'>respond_to?</span> <span class='symbol'>:to_app</span>
+  <span class='id sf'>sf</span> <span class='op'>=</span> <span class='ivar'>@spec_factory</span><span class='period'>.</span><span class='id derive'>derive</span><span class='lparen'>(</span><span class='id options'>options</span><span class='period'>.</span><span class='id merge'>merge</span><span class='lparen'>(</span><span class='symbol'>:app</span><span class='op'>=&gt;</span><span class='id app'>app</span><span class='rparen'>)</span><span class='rparen'>)</span>
+  <span class='id builder'>builder</span> <span class='op'>=</span> <span class='const'>AppBuilder</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='ivar'>@node</span><span class='comma'>,</span><span class='id sf'>sf</span><span class='comma'>,</span><span class='id app'>app</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id block'>block</span>
+    <span class='kw'>if</span> <span class='id block'>block</span><span class='period'>.</span><span class='id arity'>arity</span> <span class='op'>==</span> <span class='int'>1</span>
+      <span class='kw'>yield</span> <span class='id builder'>builder</span>
+    <span class='kw'>else</span>
+      <span class='id builder'>builder</span><span class='period'>.</span><span class='id instance_eval'>instance_eval</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='kw'>unless</span> <span class='ivar'>@node</span><span class='period'>.</span><span class='id apps'>apps</span><span class='period'>.</span><span class='id include?'>include?</span> <span class='id app'>app</span>
+    <span class='ivar'>@node</span><span class='period'>.</span><span class='id apps'>apps</span> <span class='op'>&lt;&lt;</span> <span class='id app'>app</span>
+    <span class='kw'>if</span> <span class='id app'>app</span><span class='period'>.</span><span class='id respond_to?'>respond_to?</span> <span class='symbol'>:generate_uri_specs</span>
+      <span class='id app'>app</span><span class='period'>.</span><span class='id generate_uri_specs'>generate_uri_specs</span><span class='lparen'>(</span><span class='id builder'>builder</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='id builder'>builder</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="default-instance_method">
+  
+    - (<tt>Object</tt>) <strong>default</strong>(name, value) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Sets a default value for an option.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+402
+403
+404</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 402</span>
+
+<span class='kw'>def</span> <span class='id default'>default</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span> <span class='id value'>value</span><span class='rparen'>)</span>
+  <span class='ivar'>@spec_factory</span><span class='period'>.</span><span class='id defaults'>defaults</span><span class='lbracket'>[</span><span class='id name'>name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id value'>value</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="edge-instance_method">
+  
+    - (<tt>Object</tt>) <strong>edge</strong>(as, name = as) { ... }
+  
+
+  
+    <span class="aliases">Also known as:
+    <span class="names"><span id='ref-instance_method'>ref</span></span>
+    </span>
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Adds an edge from the current node to a node with the given name.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <h3>Examples:</h3>
+    
+      <h4><div class='inline'></div></h4>
+      <pre class="example code"><span class='id nw'>nw</span> <span class='op'>=</span> <span class='const'>Addressive</span><span class='op'>::</span><span class='const'>Network</span><span class='period'>.</span><span class='id new'>new</span><span class='lbrace'>{</span>
+  <span class='comment'>#create a node named :app_a
+</span>  <span class='id node'>node</span> <span class='symbol'>:app_a</span> <span class='kw'>do</span>
+    <span class='comment'># Creates an edge to the node named :app_b. The name of the edge will be :app_b, too.
+</span>    <span class='id edge'>edge</span> <span class='symbol'>:app_b</span> 
+
+    <span class='comment'># Creates another edge to the node named :app_b with edge name :app_c.
+</span>    <span class='id edge'>edge</span> <span class='symbol'>:app_c</span><span class='comma'>,</span> <span class='symbol'>:app_b</span>
+
+    <span class='comment'># Edge takes a block. Same behavior as Builder#node.
+</span>    <span class='id edge'>edge</span> <span class='symbol'>:app_d</span> <span class='kw'>do</span>
+
+      <span class='id edge'>edge</span> <span class='symbol'>:app_a</span>
+
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='rbrace'>}</span>
+<span class='comment'># :app_a now references :app_b twice, :app_d once and is referenced only by :app_d.</span></pre>
+    
+  </div>
+
+<h3>Yields:</h3>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        
+        <div class='inline'><p>
+BlockBuilder
+</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+394
+395
+396
+397</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 394</span>
+
+<span class='kw'>def</span> <span class='id edge'>edge</span><span class='lparen'>(</span><span class='id as'>as</span> <span class='comma'>,</span> <span class='id name'>name</span> <span class='op'>=</span> <span class='id as'>as</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
+  <span class='ivar'>@node</span><span class='period'>.</span><span class='id edges'>edges</span><span class='lbracket'>[</span><span class='id as'>as</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@network</span><span class='period'>.</span><span class='id build'>build</span><span class='period'>.</span><span class='id node'>node</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span><span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span><span class='period'>.</span><span class='id node'>node</span>
+  <span class='kw'>return</span> <span class='kw'>self</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="uri-instance_method">
+  
+    - (<tt>Object</tt>) <strong>uri</strong>(name, *args) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Adds one or more uri specs for a given name.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+407
+408
+409
+410</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 407</span>
+
+<span class='kw'>def</span> <span class='id uri'>uri</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span><span class='op'>*</span><span class='id args'>args</span><span class='rparen'>)</span>
+  <span class='ivar'>@node</span><span class='period'>.</span><span class='id uri_spec'>uri_spec</span><span class='lparen'>(</span><span class='id name'>name</span><span class='rparen'>)</span> <span class='op'>&lt;&lt;</span> <span class='ivar'>@spec_factory</span><span class='period'>.</span><span class='id convert'>convert</span><span class='lparen'>(</span><span class='id args'>args</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='ivar'>@node</span><span class='period'>.</span><span class='id uri_spec'>uri_spec</span><span class='lparen'>(</span><span class='id name'>name</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Wed Nov 16 13:25:31 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,821 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Addressive::Router
+  
+    &mdash; Documentation by YARD 0.7.3
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  relpath = '..';
+  if (relpath != '') relpath += '/';
+</script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+    
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../_index.html">Index (R)</a> &raquo; 
+    <span class='title'><span class='object_link'><a href="../Addressive.html" title="Addressive (class)">Addressive</a></span></span>
+     &raquo; 
+    <span class="title">Router</span>
+  
+  
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a id="class_list_link" href="#">Class List</a>
+  
+    <a id="method_list_link" href="#">Method List</a>
+  
+    <a id="file_list_link" href="#">File List</a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+    
+    <iframe id="search_frame"></iframe>
+    
+    <div id="content"><h1>Class: Addressive::Router
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Addressive::Router</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">lib/addressive/router.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>
+A router which can be used as a rack application and routes requests to
+nodes and their apps.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+   
+    
+   
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Router/RouteEnumerator.html" title="Addressive::Router::RouteEnumerator (class)">RouteEnumerator</a></span>
+    
+  
+</p>
+
+  <h2>Constant Summary</h2>
+  
+    <dl class="constants">
+      
+        <dt id="DEBUG_NAME-constant" class="">DEBUG_NAME =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>addressive-router</span><span class='tstring_end'>'</span></span><span class='period'>.</span><span class='id freeze'>freeze</span></pre></dd>
+      
+        <dt id="DEBUG_NULL-constant" class="">DEBUG_NULL =
+          
+        </dt>
+        <dd><pre class="code"><span class='id lambda'>lambda</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id _'>_</span><span class='op'>|</span> <span class='kw'>nil</span><span class='rbrace'>}</span></pre></dd>
+      
+    </dl>
+  
+
+
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#actions-instance_method" title="#actions (instance method)">- (Object) <strong>actions</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title readonly">readonly</span>
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns the value of attribute actions.
+</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#routes-instance_method" title="#routes (instance method)">- (Object) <strong>routes</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title readonly">readonly</span>
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Returns the value of attribute routes.
+</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add-instance_method" title="#add (instance method)">- (Object) <strong>add</strong>(*nodes) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Add a nodes specs to this router.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#call-instance_method" title="#call (instance method)">- (Object) <strong>call</strong>(env) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Routes the env to an app and it&#8217;s node.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Router) <strong>initialize</strong>(tree = Tree::Direct.new) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+A new instance of Router.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#routes_for-instance_method" title="#routes_for (instance method)">- (RouteEnumerator) <strong>routes_for</strong>(path, uri) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+An enumerator which yields the requested routes.
+</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#seal%21-instance_method" title="#seal! (instance method)">- (Object) <strong>seal!</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>
+Prevents further editing of this router.
+</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <p class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Addressive::Router (class)">Router</a></span></tt>) <strong>initialize</strong>(tree = Tree::Direct.new) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+A new instance of Router
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+136
+137
+138
+139
+140
+141
+142
+143</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/addressive/router.rb', line 136</span>
+
+<span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id tree'>tree</span> <span class='op'>=</span> <span class='const'>Tree</span><span class='op'>::</span><span class='const'>Direct</span><span class='period'>.</span><span class='id new'>new</span><span class='rparen'>)</span>
+  <span class='ivar'>@routes</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='ivar'>@actions</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='ivar'>@tree</span> <span class='op'>=</span> <span class='id tree'>tree</span>
+  <span class='ivar'>@immaterial</span> <span class='op'>=</span> <span class='kw'>true</span>
+  <span class='ivar'>@mutex</span> <span class='op'>=</span> <span class='const'>Mutex</span><span class='period'>.</span><span class='id new'>new</span>
+  <span class='ivar'>@sealed</span> <span class='op'>=</span> <span class='kw'>false</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <span id="actions-instance_method"></span>
+      <div class="method_details first">
+  <p class="signature first" id="actions-instance_method">
+  
+    - (<tt>Object</tt>) <strong>actions</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns the value of attribute actions
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+134
+135
+136</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/addressive/router.rb', line 134</span>
+
+<span class='kw'>def</span> <span class='id actions'>actions</span>
+  <span class='ivar'>@actions</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <span id="routes-instance_method"></span>
+      <div class="method_details ">
+  <p class="signature " id="routes-instance_method">
+  
+    - (<tt>Object</tt>) <strong>routes</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Returns the value of attribute routes
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+134
+135
+136</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/addressive/router.rb', line 134</span>
+
+<span class='kw'>def</span> <span class='id routes'>routes</span>
+  <span class='ivar'>@routes</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+    
+    
+      <div class="method_details first">
+  <p class="signature first" id="add-instance_method">
+  
+    - (<tt>Object</tt>) <strong>add</strong>(*nodes) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Add a nodes specs to this router.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/addressive/router.rb', line 146</span>
+
+<span class='kw'>def</span> <span class='id add'>add</span><span class='lparen'>(</span><span class='op'>*</span><span class='id nodes'>nodes</span><span class='rparen'>)</span>
+  <span class='ivar'>@mutex</span><span class='period'>.</span><span class='id synchronize'>synchronize</span> <span class='kw'>do</span>
+    <span class='id raise'>raise</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Trying to add nodes to a sealed router!</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='ivar'>@sealed</span> 
+    <span class='id nodes'>nodes</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id node'>node</span><span class='op'>|</span>
+      <span class='id node'>node</span><span class='period'>.</span><span class='id uri_specs'>uri_specs</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id action'>action</span><span class='comma'>,</span> <span class='id specs'>specs</span><span class='op'>|</span>
+        <span class='id specs'>specs</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id spec'>spec</span><span class='op'>|</span>
+          <span class='kw'>if</span> <span class='id spec'>spec</span><span class='period'>.</span><span class='id valid?'>valid?</span> <span class='kw'>and</span> <span class='id spec'>spec</span><span class='period'>.</span><span class='id app'>app</span> <span class='kw'>and</span> <span class='id spec'>spec</span><span class='period'>.</span><span class='id route'>route</span> <span class='op'>!=</span> <span class='kw'>false</span>
+            <span class='ivar'>@routes</span> <span class='op'>&lt;&lt;</span> <span class='id spec'>spec</span>
+            <span class='ivar'>@actions</span><span class='lbracket'>[</span><span class='id spec'>spec</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='id node'>node</span><span class='comma'>,</span> <span class='id action'>action</span><span class='rbracket'>]</span>
+          <span class='kw'>end</span>
+        <span class='kw'>end</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+    <span class='ivar'>@immaterial</span> <span class='op'>=</span> <span class='kw'>true</span>
+  <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='kw'>self</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="call-instance_method">
+  
+    - (<tt>Object</tt>) <strong>call</strong>(env) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Routes the env to an app and it&#8217;s node.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/addressive/router.rb', line 165</span>
+
+<span class='kw'>def</span> <span class='id call'>call</span><span class='lparen'>(</span><span class='id env'>env</span><span class='rparen'>)</span>
+  <span class='id rr'>rr</span> <span class='op'>=</span> <span class='const'>Rack</span><span class='op'>::</span><span class='const'>Request</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id env'>env</span><span class='rparen'>)</span>
+  <span class='id l'>l</span> <span class='op'>=</span> <span class='id env'>env</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>rack.logger</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span>
+  <span class='id db'>db</span> <span class='op'>=</span> <span class='id l'>l</span> <span class='op'>?</span> <span class='id l'>l</span><span class='period'>.</span><span class='id method'>method</span><span class='lparen'>(</span><span class='symbol'>:debug</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='const'>DEBUG_NULL</span>
+  <span class='id db'>db</span><span class='period'>.</span><span class='id call'>call</span><span class='lparen'>(</span><span class='const'>DEBUG_NAME</span><span class='rparen'>)</span> <span class='kw'>do</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>[ ? ] </span><span class='embexpr_beg'>#{</span><span class='id rr'>rr</span><span class='period'>.</span><span class='id url'>url</span><span class='period'>.</span><span class='id inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+  <span class='id matches'>matches</span> <span class='op'>=</span> <span class='id routes_for'>routes_for</span><span class='lparen'>(</span><span class='id rr'>rr</span><span class='period'>.</span><span class='id path'>path</span><span class='comma'>,</span> <span class='id rr'>rr</span><span class='period'>.</span><span class='id url'>url</span><span class='rparen'>)</span>
+  <span class='id result'>result</span> <span class='op'>=</span> <span class='kw'>nil</span>
+  <span class='id matches'>matches</span><span class='period'>.</span><span class='id each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id addressive'>addressive</span><span class='op'>|</span>
+    <span class='id env'>env</span><span class='lbracket'>[</span><span class='const'>ADDRESSIVE_ENV_KEY</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id addressive'>addressive</span>
+    <span class='kw'>begin</span>
+      <span class='id result'>result</span> <span class='op'>=</span> <span class='id addressive'>addressive</span><span class='period'>.</span><span class='id spec'>spec</span><span class='period'>.</span><span class='id app'>app</span><span class='period'>.</span><span class='id call'>call</span><span class='lparen'>(</span><span class='id env'>env</span><span class='rparen'>)</span>
+      <span class='id db'>db</span><span class='period'>.</span><span class='id call'>call</span><span class='lparen'>(</span><span class='const'>DEBUG_NAME</span><span class='rparen'>)</span> <span class='kw'>do</span>
+        <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>[</span><span class='embexpr_beg'>#{</span><span class='id result'>result</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'>] </span><span class='embexpr_beg'>#{</span><span class='id addressive'>addressive</span><span class='period'>.</span><span class='id spec'>spec</span><span class='period'>.</span><span class='id template'>template</span><span class='period'>.</span><span class='id pattern'>pattern</span><span class='rbrace'>}</span><span class='tstring_content'> with </span><span class='embexpr_beg'>#{</span><span class='id addressive'>addressive</span><span class='period'>.</span><span class='id variables'>variables</span><span class='period'>.</span><span class='id inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_content'> on </span><span class='embexpr_beg'>#{</span><span class='id addressive'>addressive</span><span class='period'>.</span><span class='id spec'>spec</span><span class='period'>.</span><span class='id app'>app</span><span class='rbrace'>}</span><span class='tstring_content'> ( route </span><span class='embexpr_beg'>#{</span><span class='id addressive'>addressive</span><span class='period'>.</span><span class='id data'>data</span><span class='lbracket'>[</span><span class='symbol'>:routes.scanned</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'> / </span><span class='embexpr_beg'>#{</span><span class='id addressive'>addressive</span><span class='period'>.</span><span class='id data'>data</span><span class='lbracket'>[</span><span class='symbol'>:routes.total</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'> ) after </span><span class='embexpr_beg'>#{</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>%.6f</span><span class='tstring_end'>'</span></span> <span class='op'>%</span> <span class='id addressive'>addressive</span><span class='period'>.</span><span class='id data'>data</span><span class='lbracket'>[</span><span class='symbol'>:duration</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+      <span class='kw'>end</span>
+    <span class='kw'>rescue</span>
+      <span class='id db'>db</span><span class='period'>.</span><span class='id call'>call</span><span class='lparen'>(</span><span class='const'>DEBUG_NAME</span><span class='rparen'>)</span> <span class='kw'>do</span>
+        <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>[!!!] </span><span class='embexpr_beg'>#{</span><span class='id addressive'>addressive</span><span class='period'>.</span><span class='id spec'>spec</span><span class='period'>.</span><span class='id template'>template</span><span class='period'>.</span><span class='id pattern'>pattern</span><span class='rbrace'>}</span><span class='tstring_content'> with </span><span class='embexpr_beg'>#{</span><span class='id addressive'>addressive</span><span class='period'>.</span><span class='id variables'>variables</span><span class='period'>.</span><span class='id inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_content'> on </span><span class='embexpr_beg'>#{</span><span class='id addressive'>addressive</span><span class='period'>.</span><span class='id spec'>spec</span><span class='period'>.</span><span class='id app'>app</span><span class='rbrace'>}</span><span class='tstring_content'> ( route </span><span class='embexpr_beg'>#{</span><span class='id addressive'>addressive</span><span class='period'>.</span><span class='id data'>data</span><span class='lbracket'>[</span><span class='symbol'>:routes.scanned</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'> / </span><span class='embexpr_beg'>#{</span><span class='id addressive'>addressive</span><span class='period'>.</span><span class='id data'>data</span><span class='lbracket'>[</span><span class='symbol'>:routes.total</span><span class='tstring_end'>'</span></span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_content'> ) after </span><span class='embexpr_beg'>#{</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>%.6f</span><span class='tstring_end'>'</span></span> <span class='op'>%</span> <span class='id addressive'>addressive</span><span class='period'>.</span><span class='id data'>data</span><span class='lbracket'>[</span><span class='symbol'>:duration</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+      <span class='kw'>end</span>
+      <span class='id raise'>raise</span>
+    <span class='kw'>end</span>
+    <span class='kw'>if</span> <span class='id result'>result</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='int'>404</span>
+      <span class='kw'>break</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='id result'>result</span><span class='period'>.</span><span class='id nil?'>nil?</span>
+    <span class='id db'>db</span><span class='period'>.</span><span class='id call'>call</span><span class='lparen'>(</span><span class='const'>DEBUG_NAME</span><span class='rparen'>)</span> <span class='kw'>do</span>
+      <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>[404] Nothing found</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+    <span class='kw'>return</span> <span class='id not_found'>not_found</span><span class='lparen'>(</span><span class='id env'>env</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='id result'>result</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="routes_for-instance_method">
+  
+    - (<tt><span class='object_link'><a href="Router/RouteEnumerator.html" title="Addressive::Router::RouteEnumerator (class)">RouteEnumerator</a></span></tt>) <strong>routes_for</strong>(path, uri) 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+An enumerator which yields the requested routes
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <h3>Parameters:</h3>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>path</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>
+String the path to look for
+</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>uri</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>
+String the full uri
+</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<h3>Returns:</h3>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Router/RouteEnumerator.html" title="Addressive::Router::RouteEnumerator (class)">RouteEnumerator</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>
+an enumerator which yields the requested routes
+</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+233
+234
+235
+236</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/addressive/router.rb', line 233</span>
+
+<span class='kw'>def</span> <span class='id routes_for'>routes_for</span><span class='lparen'>(</span><span class='id path'>path</span><span class='comma'>,</span> <span class='id uri'>uri</span><span class='rparen'>)</span>
+  <span class='id materialize!'>materialize!</span>
+  <span class='kw'>return</span> <span class='const'>RouteEnumerator</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='ivar'>@tree</span><span class='period'>.</span><span class='id preroute'>preroute</span><span class='lparen'>(</span><span class='id path'>path</span><span class='comma'>,</span><span class='id uri'>uri</span><span class='rparen'>)</span><span class='comma'>,</span><span class='id path'>path</span><span class='comma'>,</span><span class='id uri'>uri</span><span class='comma'>,</span><span class='ivar'>@actions</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <p class="signature " id="seal!-instance_method">
+  
+    - (<tt>Object</tt>) <strong>seal!</strong> 
+  
+
+  
+</p><div class="docstring">
+  <div class="discussion">
+    <p>
+Prevents further editing of this router. This is not mandatory, but
+encouraged if later changes are not required.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <h3>Examples:</h3>
+    
+      <h4><div class='inline'></div></h4>
+      <pre class="example code"><span class='id rtr'>rtr</span> <span class='op'>=</span> <span class='const'>Addressive</span><span class='op'>::</span><span class='const'>Router</span><span class='period'>.</span><span class='id new'>new</span>
+<span class='id rtr'>rtr</span><span class='period'>.</span><span class='id add'>add</span><span class='lparen'>(</span> <span class='const'>Addressive</span><span class='period'>.</span><span class='id node'>node</span> <span class='rparen'>)</span> <span class='comment'># okay
+</span><span class='id rtr'>rtr</span><span class='period'>.</span><span class='id seal!'>seal!</span>
+<span class='id rtr'>rtr</span><span class='period'>.</span><span class='id add'>add</span><span class='lparen'>(</span> <span class='const'>Addressive</span><span class='period'>.</span><span class='id node'>node</span> <span class='rparen'>)</span> <span class='comment'>#!&gt; Exception</span></pre>
+    
+  </div>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+252
+253
+254
+255
+256
+257</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/addressive/router.rb', line 252</span>
+
+<span class='kw'>def</span> <span class='id seal!'>seal!</span>
+  <span class='ivar'>@mutex</span><span class='period'>.</span><span class='id synchronize'>synchronize</span> <span class='kw'>do</span>
+    <span class='ivar'>@sealed</span> <span class='op'>=</span> <span class='kw'>true</span>
+  <span class='kw'>end</span>
+  <span class='id materialize!'>materialize!</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+    
+    <div id="footer">
+  Generated on Wed Nov 16 14:02:08 2011 by 
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.7.3 (ruby-1.9.2).
+</div>
+
+  </body>
+</html>

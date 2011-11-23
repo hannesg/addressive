@@ -1,11 +1,11 @@
 Gem::Specification.new do |s|
   s.name = 'addressive'
-  s.version = '0.0.1'
-  s.date = '2011-10-31'
+  s.version = '0.1.0'
+  s.date = '2011-11-23'
   s.authors = ["HannesG"]
   s.email = %q{hannes.georg@googlemail.com}
   s.summary = 'A system which should help bringing different Rack applications together.'
-  s.homepage = 'http://github.com/hannesg/addressive'
+  s.homepage = 'https://github.com/hannesg/addressive'
   s.description = ''
   
   s.require_paths = ['lib']
