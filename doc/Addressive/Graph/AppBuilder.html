@@ -34,7 +34,7 @@
       <div id="menu">
   
     <a href="../../_index.html">Index (A)</a> &raquo; 
-    <span class='title'><span class='object_link'><a href="../../Addressive.html" title="Addressive (class)">Addressive</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Graph.html" title="Addressive::Graph (class)">Graph</a></span></span>
+    <span class='title'><span class='object_link'><a href="../../Addressive.html" title="Addressive (module)">Addressive</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Graph.html" title="Addressive::Graph (class)">Graph</a></span></span>
      &raquo; 
     <span class="title">AppBuilder</span>
   
@@ -87,16 +87,15 @@
   
   
     <dt class="r2 last">Defined in:</dt>
-    <dd class="r2 last">lib/addressive.rb</dd>
+    <dd class="r2 last">lib/addressive/graph.rb</dd>
   
 </dl>
 <div class="clear"></div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    <p>
-An app builder is used to add uris for a certain app to a node.
-</p>
+    
+<p>An app builder is used to add uris for a certain app to a node.</p>
 
 
   </div>
@@ -133,9 +132,8 @@ An app builder is used to add uris for a certain app to a node.
   
 
   
-    <span class="summary_desc"><div class='inline'><p>
-Sets a default value for an option.
-</p>
+    <span class="summary_desc"><div class='inline'>
+<p>Sets a default value for an option.</p>
 </div></span>
   
 </li>
@@ -157,9 +155,8 @@ Sets a default value for an option.
   
 
   
-    <span class="summary_desc"><div class='inline'><p>
-Adds one or more uri specs for a given name.
-</p>
+    <span class="summary_desc"><div class='inline'>
+<p>Adds one or more uri specs for a given name.</p>
 </div></span>
   
 </li>
@@ -183,9 +180,8 @@ Adds one or more uri specs for a given name.
   
 </p><div class="docstring">
   <div class="discussion">
-    <p>
-Sets a default value for an option.
-</p>
+    
+<p>Sets a default value for an option.</p>
 
 
   </div>
@@ -199,12 +195,12 @@ Sets a default value for an option.
       <pre class="lines">
 
 
-351
-352
-353</pre>
+36
+37
+38</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 351</span>
+      <pre class="code"><span class="info file"># File 'lib/addressive/graph.rb', line 36</span>
 
 <span class='kw'>def</span> <span class='id default'>default</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span> <span class='id value'>value</span><span class='rparen'>)</span>
   <span class='ivar'>@spec_factory</span><span class='period'>.</span><span class='id defaults'>defaults</span><span class='lbracket'>[</span><span class='id name'>name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id value'>value</span>
@@ -223,10 +219,9 @@ Sets a default value for an option.
   
 </p><div class="docstring">
   <div class="discussion">
-    <p>
-Adds one or more uri specs for a given name. It uses the current app as the
-default app for all specs.
-</p>
+    
+<p>Adds one or more uri specs for a given name. It uses the current app as the
+default app for all specs.</p>
 
 
   </div>
@@ -240,14 +235,14 @@ default app for all specs.
       <pre class="lines">
 
 
-356
-357
-358
-359
-360</pre>
+41
+42
+43
+44
+45</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 356</span>
+      <pre class="code"><span class="info file"># File 'lib/addressive/graph.rb', line 41</span>
 
 <span class='kw'>def</span> <span class='id uri'>uri</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span><span class='op'>*</span><span class='id args'>args</span><span class='rparen'>)</span>
   <span class='id specs'>specs</span> <span class='op'>=</span> <span class='ivar'>@node</span><span class='period'>.</span><span class='id uri_spec'>uri_spec</span><span class='lparen'>(</span><span class='id name'>name</span><span class='rparen'>)</span>
@@ -264,9 +259,9 @@ default app for all specs.
 </div>
     
     <div id="footer">
-  Generated on Wed Nov 16 14:02:08 2011 by 
+  Generated on Wed Nov 23 13:23:07 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.7.3 (ruby-1.9.2).
+  0.7.3 (ruby-1.9.3).
 </div>
 
   </body>

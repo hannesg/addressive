@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'addressive'
-  s.version = '0.1.0'
+  s.version = '0.1.0.alpha'
   s.date = '2011-11-23'
   s.authors = ["HannesG"]
   s.email = %q{hannes.georg@googlemail.com}

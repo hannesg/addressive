@@ -34,7 +34,7 @@
       <div id="menu">
   
     <a href="../_index.html">Index (U)</a> &raquo; 
-    <span class='title'><span class='object_link'><a href="../Addressive.html" title="Addressive (class)">Addressive</a></span></span>
+    <span class='title'><span class='object_link'><a href="../Addressive.html" title="Addressive (module)">Addressive</a></span></span>
      &raquo; 
     <span class="title">URISpecFactory</span>
   
@@ -94,11 +94,10 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    <p>
-A URISpecFactory contains all information necessary to create a URISpec.
-This class exists because it&#8217;s annoying to pass around default values
-by hand and a factory makes it possible to apply post-processing options.
-</p>
+    
+<p>A URISpecFactory contains all information necessary to create a URISpec.
+This class exists because it's annoying to pass around default values by
+hand and a factory makes it possible to apply post-processing options.</p>
 
 
   </div>
@@ -130,9 +129,8 @@ by hand and a factory makes it possible to apply post-processing options.
   
 
   
-    <span class="summary_desc"><div class='inline'><p>
-Returns the value of attribute defaults.
-</p>
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute defaults.</p>
 </div></span>
   
 </li>
@@ -234,9 +232,8 @@ Returns the value of attribute defaults.
   
 
   
-    <span class="summary_desc"><div class='inline'><p>
-A new instance of URISpecFactory.
-</p>
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of URISpecFactory.</p>
 </div></span>
   
 </li>
@@ -278,9 +275,8 @@ A new instance of URISpecFactory.
   
 </p><div class="docstring">
   <div class="discussion">
-    <p>
-A new instance of URISpecFactory
-</p>
+    
+<p>A new instance of URISpecFactory</p>
 
 
   </div>
@@ -294,13 +290,13 @@ A new instance of URISpecFactory
       <pre class="lines">
 
 
-223
-224
 225
-226</pre>
+226
+227
+228</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 223</span>
+      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 225</span>
 
 <span class='kw'>def</span> <span class='id initialize'>initialize</span><span class='lparen'>(</span><span class='id defaults'>defaults</span><span class='comma'>,</span> <span class='id parent'>parent</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='ivar'>@defaults</span> <span class='op'>=</span> <span class='id defaults'>defaults</span>
@@ -328,9 +324,8 @@ A new instance of URISpecFactory
   
 </p><div class="docstring">
   <div class="discussion">
-    <p>
-Returns the value of attribute defaults
-</p>
+    
+<p>Returns the value of attribute defaults</p>
 
 
   </div>
@@ -344,12 +339,12 @@ Returns the value of attribute defaults
       <pre class="lines">
 
 
-221
-222
-223</pre>
+223
+224
+225</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 221</span>
+      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 223</span>
 
 <span class='kw'>def</span> <span class='id defaults'>defaults</span>
   <span class='ivar'>@defaults</span>
@@ -379,12 +374,12 @@ Returns the value of attribute defaults
       <pre class="lines">
 
 
-234
-235
-236</pre>
+236
+237
+238</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 234</span>
+      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 236</span>
 
 <span class='kw'>def</span> <span class='id all_defaults'>all_defaults</span>
   <span class='ivar'>@parent</span> <span class='op'>?</span> <span class='ivar'>@parent</span><span class='period'>.</span><span class='id all_defaults'>all_defaults</span><span class='period'>.</span><span class='id merge'>merge</span><span class='lparen'>(</span><span class='id defaults'>defaults</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='id defaults'>defaults</span>
@@ -411,12 +406,12 @@ Returns the value of attribute defaults
       <pre class="lines">
 
 
-228
-229
-230</pre>
+230
+231
+232</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 228</span>
+      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 230</span>
 
 <span class='kw'>def</span> <span class='id convert'>convert</span><span class='lparen'>(</span><span class='op'>*</span><span class='id args'>args</span><span class='rparen'>)</span>
   <span class='id args'>args</span><span class='period'>.</span><span class='id map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id converter'>converter</span><span class='rparen'>)</span><span class='period'>.</span><span class='id flatten'>flatten</span>
@@ -439,12 +434,12 @@ Returns the value of attribute defaults
       <pre class="lines">
 
 
-238
-239
-240</pre>
+240
+241
+242</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 238</span>
+      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 240</span>
 
 <span class='kw'>def</span> <span class='id derive'>derive</span><span class='lparen'>(</span><span class='id nu_defaults'>nu_defaults</span><span class='rparen'>)</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id class'>class</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='id nu_defaults'>nu_defaults</span><span class='comma'>,</span> <span class='kw'>self</span><span class='rparen'>)</span>
@@ -467,8 +462,6 @@ Returns the value of attribute defaults
       <pre class="lines">
 
 
-209
-210
 211
 212
 213
@@ -477,10 +470,12 @@ Returns the value of attribute defaults
 216
 217
 218
-219</pre>
+219
+220
+221</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 209</span>
+      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 211</span>
 
 <span class='kw'>def</span> <span class='id normalize'>normalize</span><span class='lparen'>(</span> <span class='id spec'>spec</span><span class='comma'>,</span> <span class='id defaults'>defaults</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id all_defaults'>all_defaults</span> <span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id defaults'>defaults</span><span class='period'>.</span><span class='id key?'>key?</span> <span class='symbol'>:app</span> 
@@ -503,9 +498,9 @@ Returns the value of attribute defaults
 </div>
     
     <div id="footer">
-  Generated on Wed Nov 16 14:02:08 2011 by 
+  Generated on Wed Nov 23 13:23:07 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.7.3 (ruby-1.9.2).
+  0.7.3 (ruby-1.9.3).
 </div>
 
   </body>

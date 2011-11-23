@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>
-  Class: Addressive
+  Module: Addressive
   
     &mdash; Documentation by YARD 0.7.3
   
@@ -56,7 +56,7 @@
     
     <iframe id="search_frame"></iframe>
     
-    <div id="content"><h1>Class: Addressive
+    <div id="content"><h1>Module: Addressive
   
   
   
@@ -64,37 +64,16 @@
 
 <dl class="box">
   
-    <dt class="r1">Inherits:</dt>
-    <dd class="r1">
-      <span class="inheritName">Struct</span>
-      
-        <ul class="fullTree">
-          <li>Object</li>
-          
-            <li class="next">Struct</li>
-          
-            <li class="next">Addressive</li>
-          
-        </ul>
-        <a href="#" class="inheritanceTree">show all</a>
-      
-      </dd>
-    
-  
   
     
   
-    
-      <dt class="r2">Includes:</dt>
-      <dd class="r2"><span class='object_link'><a href="Addressive/URIBuilder.html" title="Addressive::URIBuilder (module)">URIBuilder</a></span></dd>
-      
     
   
   
   
     <dt class="r1 last">Defined in:</dt>
     <dd class="r1 last">lib/addressive.rb<span class="defines">,<br />
-  lib/addressive/router.rb,<br /> lib/addressive/static.rb,<br /> lib/addressive/request.rb</span>
+  lib/addressive/graph.rb,<br /> lib/addressive/static.rb,<br /> lib/addressive/router.rb,<br /> lib/addressive/request.rb</span>
 </dd>
   
 </dl>
@@ -102,21 +81,22 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    <p>
-Addressive is library which should make it possible for different
-rack-applications to live together on the same server. To accomplish this,
-addressive supplies you with:
-</p>
-<pre class="code">
-  * A model for a graph in which each node is one application.
-  * A template-based uri-builder which is aware of the network and can generate uri for any reachable application.
-  * A router which can route rack-requests based on the known templates.
-</pre>
-<p>
-What needs to be done by the apps:
-</p>
-<pre class="code">
-  * Provide uri templates.</pre>
+    
+<p>This program is free software: you can redistribute it and/or modify</p>
+
+<pre class="code">it under the terms of the Affero GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+
+(c) 2011 by Hannes Georg</pre>
 
 
   </div>
@@ -132,7 +112,7 @@ What needs to be done by the apps:
     
    
     
-      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Addressive/Error.html" title="Addressive::Error (class)">Error</a></span>, <span class='object_link'><a href="Addressive/Graph.html" title="Addressive::Graph (class)">Graph</a></span>, <span class='object_link'><a href="Addressive/NoEdgeFound.html" title="Addressive::NoEdgeFound (class)">NoEdgeFound</a></span>, <span class='object_link'><a href="Addressive/NoURISpecFound.html" title="Addressive::NoURISpecFound (class)">NoURISpecFound</a></span>, <span class='object_link'><a href="Addressive/Node.html" title="Addressive::Node (class)">Node</a></span>, <span class='object_link'><a href="Addressive/Request.html" title="Addressive::Request (class)">Request</a></span>, <span class='object_link'><a href="Addressive/Router.html" title="Addressive::Router (class)">Router</a></span>, <span class='object_link'><a href="Addressive/Static.html" title="Addressive::Static (class)">Static</a></span>, <span class='object_link'><a href="Addressive/URIBuilderClass.html" title="Addressive::URIBuilderClass (class)">URIBuilderClass</a></span>, <span class='object_link'><a href="Addressive/URISpec.html" title="Addressive::URISpec (class)">URISpec</a></span>, <span class='object_link'><a href="Addressive/URISpecFactory.html" title="Addressive::URISpecFactory (class)">URISpecFactory</a></span>, <span class='object_link'><a href="Addressive/URISpecList.html" title="Addressive::URISpecList (class)">URISpecList</a></span>
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Addressive/Error.html" title="Addressive::Error (class)">Error</a></span>, <span class='object_link'><a href="Addressive/Graph.html" title="Addressive::Graph (class)">Graph</a></span>, <span class='object_link'><a href="Addressive/Match.html" title="Addressive::Match (class)">Match</a></span>, <span class='object_link'><a href="Addressive/NoEdgeFound.html" title="Addressive::NoEdgeFound (class)">NoEdgeFound</a></span>, <span class='object_link'><a href="Addressive/NoURISpecFound.html" title="Addressive::NoURISpecFound (class)">NoURISpecFound</a></span>, <span class='object_link'><a href="Addressive/Node.html" title="Addressive::Node (class)">Node</a></span>, <span class='object_link'><a href="Addressive/Request.html" title="Addressive::Request (class)">Request</a></span>, <span class='object_link'><a href="Addressive/Router.html" title="Addressive::Router (class)">Router</a></span>, <span class='object_link'><a href="Addressive/Static.html" title="Addressive::Static (class)">Static</a></span>, <span class='object_link'><a href="Addressive/URIBuilderClass.html" title="Addressive::URIBuilderClass (class)">URIBuilderClass</a></span>, <span class='object_link'><a href="Addressive/URISpec.html" title="Addressive::URISpec (class)">URISpec</a></span>, <span class='object_link'><a href="Addressive/URISpecFactory.html" title="Addressive::URISpecFactory (class)">URISpecFactory</a></span>, <span class='object_link'><a href="Addressive/URISpecList.html" title="Addressive::URISpecList (class)">URISpecList</a></span>
     
   
 </p>
@@ -150,157 +130,8 @@ What needs to be done by the apps:
   
 
 
-  
-  
-  
-  
-  
-  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
-  <ul class="summary">
-    
-      <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#action-instance_method" title="#action (instance method)">- (Object) <strong>action</strong> </a>
-    
-
-    
-  </span>
-  
-  
-    
-    
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'><p>
-Returns the value of attribute action.
-</p>
-</div></span>
-  
-</li>
-
-    
-      <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#data-instance_method" title="#data (instance method)">- (Object) <strong>data</strong> </a>
-    
-
-    
-  </span>
-  
-  
-    
-    
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'><p>
-Returns the value of attribute data.
-</p>
-</div></span>
-  
-</li>
-
-    
-      <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#node-instance_method" title="#node (instance method)">- (Object) <strong>node</strong> </a>
-    
-
-    
-  </span>
-  
-  
-    
-    
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'><p>
-Returns the value of attribute node.
-</p>
-</div></span>
-  
-</li>
-
-    
-      <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#spec-instance_method" title="#spec (instance method)">- (Object) <strong>spec</strong> </a>
-    
-
-    
-  </span>
-  
-  
-    
-    
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'><p>
-Returns the value of attribute spec.
-</p>
-</div></span>
-  
-</li>
-
-    
-      <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#variables-instance_method" title="#variables (instance method)">- (Object) <strong>variables</strong> </a>
-    
-
-    
-  </span>
-  
-  
-    
-    
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'><p>
-Returns the value of attribute variables.
-</p>
-</div></span>
-  
-</li>
-
-    
-  </ul>
 
 
-
-  
-  
-  
-  
 
   
     <h2>
@@ -326,9 +157,8 @@ Returns the value of attribute variables.
   
 
   
-    <span class="summary_desc"><div class='inline'><p>
-Creates a new graph and yields a builder for it.
-</p>
+    <span class="summary_desc"><div class='inline'>
+<p>Creates a new graph and yields a builder for it.</p>
 </div></span>
   
 </li>
@@ -350,9 +180,8 @@ Creates a new graph and yields a builder for it.
   
 
   
-    <span class="summary_desc"><div class='inline'><p>
-Creates a new node and yields a builder for it.
-</p>
+    <span class="summary_desc"><div class='inline'>
+<p>Creates a new node and yields a builder for it.</p>
 </div></span>
   
 </li>
@@ -361,332 +190,6 @@ Creates a new node and yields a builder for it.
     </ul>
   
 
-
-  
-  
-  
-  
-  
-  
-  
-  <h3 class="inherited">Methods included from <span class='object_link'><a href="Addressive/URIBuilder.html" title="Addressive::URIBuilder (module)">URIBuilder</a></span></h3>
-  <p class="inherited"><span class='object_link'><a href="Addressive/URIBuilder.html#humanization_key-instance_method" title="Addressive::URIBuilder#humanization_key (method)">#humanization_key</a></span>, <span class='object_link'><a href="Addressive/URIBuilder.html#new-class_method" title="Addressive::URIBuilder.new (method)">new</a></span>, <span class='object_link'><a href="Addressive/URIBuilder.html#to_s-instance_method" title="Addressive::URIBuilder#to_s (method)">#to_s</a></span>, <span class='object_link'><a href="Addressive/URIBuilder.html#uri-instance_method" title="Addressive::URIBuilder#uri (method)">#uri</a></span></p>
-
-  
-  <div id="instance_attr_details" class="attr_details">
-    <h2>Instance Attribute Details</h2>
-    
-      
-      <span id="action=-instance_method"></span>
-      <span id="action-instance_method"></span>
-      <div class="method_details first">
-  <p class="signature first" id="action-instance_method">
-  
-    - (<tt>Object</tt>) <strong>action</strong> 
-  
-
-  
-</p><div class="docstring">
-  <div class="discussion">
-    <p>
-Returns the value of attribute action
-</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-<h3>Returns:</h3>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>Object</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'><p>
-the current value of action
-</p>
-</div>
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-30
-31
-32</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 30</span>
-
-<span class='kw'>def</span> <span class='id action'>action</span>
-  <span class='ivar'>@action</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      
-      <span id="data=-instance_method"></span>
-      <span id="data-instance_method"></span>
-      <div class="method_details ">
-  <p class="signature " id="data-instance_method">
-  
-    - (<tt>Object</tt>) <strong>data</strong> 
-  
-
-  
-</p><div class="docstring">
-  <div class="discussion">
-    <p>
-Returns the value of attribute data
-</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-<h3>Returns:</h3>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>Object</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'><p>
-the current value of data
-</p>
-</div>
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-30
-31
-32</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 30</span>
-
-<span class='kw'>def</span> <span class='id data'>data</span>
-  <span class='ivar'>@data</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      
-      <span id="node=-instance_method"></span>
-      <span id="node-instance_method"></span>
-      <div class="method_details ">
-  <p class="signature " id="node-instance_method">
-  
-    - (<tt>Object</tt>) <strong>node</strong> 
-  
-
-  
-</p><div class="docstring">
-  <div class="discussion">
-    <p>
-Returns the value of attribute node
-</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-<h3>Returns:</h3>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>Object</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'><p>
-the current value of node
-</p>
-</div>
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-30
-31
-32</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 30</span>
-
-<span class='kw'>def</span> <span class='id node'>node</span>
-  <span class='ivar'>@node</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      
-      <span id="spec=-instance_method"></span>
-      <span id="spec-instance_method"></span>
-      <div class="method_details ">
-  <p class="signature " id="spec-instance_method">
-  
-    - (<tt>Object</tt>) <strong>spec</strong> 
-  
-
-  
-</p><div class="docstring">
-  <div class="discussion">
-    <p>
-Returns the value of attribute spec
-</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-<h3>Returns:</h3>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>Object</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'><p>
-the current value of spec
-</p>
-</div>
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-30
-31
-32</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 30</span>
-
-<span class='kw'>def</span> <span class='id spec'>spec</span>
-  <span class='ivar'>@spec</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      
-      <span id="variables=-instance_method"></span>
-      <span id="variables-instance_method"></span>
-      <div class="method_details ">
-  <p class="signature " id="variables-instance_method">
-  
-    - (<tt>Object</tt>) <strong>variables</strong> 
-  
-
-  
-</p><div class="docstring">
-  <div class="discussion">
-    <p>
-Returns the value of attribute variables
-</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-<h3>Returns:</h3>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>Object</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'><p>
-the current value of variables
-</p>
-</div>
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-30
-31
-32</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 30</span>
-
-<span class='kw'>def</span> <span class='id variables'>variables</span>
-  <span class='ivar'>@variables</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-  </div>
 
 
   <div id="class_method_details" class="method_details_list">
@@ -702,13 +205,11 @@ the current value of variables
   
 </p><div class="docstring">
   <div class="discussion">
-    <p>
-Creates a new graph and yields a builder for it
-</p>
-<p>
-This is good, if you want to create a graph with disconnected nodes or
-multiple root-nodes.
-</p>
+    
+<p>Creates a new graph and yields a builder for it</p>
+
+<p>This is good, if you want to create a graph with disconnected nodes or
+multiple root-nodes.</p>
 
 
   </div>
@@ -782,12 +283,12 @@ multiple root-nodes.
       <pre class="lines">
 
 
-607
-608
-609</pre>
+399
+400
+401</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 607</span>
+      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 399</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id graph'>graph</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
   <span class='const'>Graph</span><span class='period'>.</span><span class='id new'>new</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
@@ -806,16 +307,14 @@ multiple root-nodes.
   
 </p><div class="docstring">
   <div class="discussion">
-    <p>
-Creates a new node and yields a builder for it
-</p>
-<p>
-This method makes it easy to create a tree-like structur by implictly
+    
+<p>Creates a new node and yields a builder for it</p>
+
+<p>This method makes it easy to create a tree-like structur by implictly
 creating and returning a root node ( by default called :root ). This should
 be used in most cases, as you will likely have just one connected component
 in an addressive graph. For complexer graphs you can use
-#graph.
-</p>
+#graph.</p>
 
 
   </div>
@@ -853,9 +352,8 @@ in an addressive graph. For complexer graphs you can use
       
       
         &mdash;
-        <div class='inline'><p>
-a name for this node
-</p>
+        <div class='inline'>
+<p>a name for this node</p>
 </div>
       
     </li>
@@ -895,14 +393,14 @@ a name for this node
       <pre class="lines">
 
 
-565
-566
-567
-568
-569</pre>
+357
+358
+359
+360
+361</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 565</span>
+      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 357</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id node'>node</span><span class='lparen'>(</span><span class='id name'>name</span><span class='op'>=</span><span class='symbol'>:root</span><span class='comma'>,</span><span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
   <span class='const'>Graph</span><span class='period'>.</span><span class='id new'>new</span><span class='lbrace'>{</span> <span class='op'>|</span><span class='id bldr'>bldr</span><span class='op'>|</span>
@@ -919,9 +417,9 @@ a name for this node
 </div>
     
     <div id="footer">
-  Generated on Wed Nov 16 14:02:07 2011 by 
+  Generated on Wed Nov 23 13:23:06 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.7.3 (ruby-1.9.2).
+  0.7.3 (ruby-1.9.3).
 </div>
 
   </body>

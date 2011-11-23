@@ -34,7 +34,7 @@
       <div id="menu">
   
     <a href="../../_index.html">Index (N)</a> &raquo; 
-    <span class='title'><span class='object_link'><a href="../../Addressive.html" title="Addressive (class)">Addressive</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Graph.html" title="Addressive::Graph (class)">Graph</a></span></span>
+    <span class='title'><span class='object_link'><a href="../../Addressive.html" title="Addressive (module)">Addressive</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Graph.html" title="Addressive::Graph (class)">Graph</a></span></span>
      &raquo; 
     <span class="title">NodeBuilder</span>
   
@@ -87,17 +87,16 @@
   
   
     <dt class="r2 last">Defined in:</dt>
-    <dd class="r2 last">lib/addressive.rb</dd>
+    <dd class="r2 last">lib/addressive/graph.rb</dd>
   
 </dl>
 <div class="clear"></div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    <p>
-A NodeBuilder is used to build a Node inside a Graph. This class should not
-be generated directly, it&#8217;s created for you by <span class='object_link'><a href="Builder.html#node-instance_method" title="Addressive::Graph::Builder#node (method)">Builder#node</a></span>.
-</p>
+    
+<p>A NodeBuilder is used to build a Node inside a Graph. This class should not
+be generated directly, it's created for you by <span class='object_link'><a href="Builder.html#node-instance_method" title="Addressive::Graph::Builder#node (method)">Builder#node</a></span>.</p>
 
 
   </div>
@@ -129,9 +128,8 @@ be generated directly, it&#8217;s created for you by <span class='object_link'><
   
 
   
-    <span class="summary_desc"><div class='inline'><p>
-Returns the value of attribute node.
-</p>
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute node.</p>
 </div></span>
   
 </li>
@@ -166,9 +164,8 @@ Returns the value of attribute node.
   
 
   
-    <span class="summary_desc"><div class='inline'><p>
-Adds an rack-application to this node.
-</p>
+    <span class="summary_desc"><div class='inline'>
+<p>Adds an rack-application to this node.</p>
 </div></span>
   
 </li>
@@ -190,9 +187,8 @@ Adds an rack-application to this node.
   
 
   
-    <span class="summary_desc"><div class='inline'><p>
-Sets a default value for an option.
-</p>
+    <span class="summary_desc"><div class='inline'>
+<p>Sets a default value for an option.</p>
 </div></span>
   
 </li>
@@ -216,9 +212,8 @@ Sets a default value for an option.
   
 
   
-    <span class="summary_desc"><div class='inline'><p>
-Adds an edge from the current node to a node with the given name.
-</p>
+    <span class="summary_desc"><div class='inline'>
+<p>Adds an edge from the current node to a node with the given name.</p>
 </div></span>
   
 </li>
@@ -240,9 +235,8 @@ Adds an edge from the current node to a node with the given name.
   
 
   
-    <span class="summary_desc"><div class='inline'><p>
-Adds one or more uri specs for a given name.
-</p>
+    <span class="summary_desc"><div class='inline'>
+<p>Adds one or more uri specs for a given name.</p>
 </div></span>
   
 </li>
@@ -267,9 +261,8 @@ Adds one or more uri specs for a given name.
   
 </p><div class="docstring">
   <div class="discussion">
-    <p>
-Returns the value of attribute node
-</p>
+    
+<p>Returns the value of attribute node</p>
 
 
   </div>
@@ -283,12 +276,12 @@ Returns the value of attribute node
       <pre class="lines">
 
 
-368
-369
-370</pre>
+53
+54
+55</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 368</span>
+      <pre class="code"><span class="info file"># File 'lib/addressive/graph.rb', line 53</span>
 
 <span class='kw'>def</span> <span class='id node'>node</span>
   <span class='ivar'>@node</span>
@@ -314,9 +307,8 @@ Returns the value of attribute node
   
 </p><div class="docstring">
   <div class="discussion">
-    <p>
-Adds an rack-application to this node.
-</p>
+    
+<p>Adds an rack-application to this node.</p>
 
 
   </div>
@@ -379,28 +371,28 @@ Adds an rack-application to this node.
       <pre class="lines">
 
 
-441
-442
-443
-444
-445
-446
-447
-448
-449
-450
-451
-452
-453
-454
-455
-456
-457
-458
-459</pre>
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 441</span>
+      <pre class="code"><span class="info file"># File 'lib/addressive/graph.rb', line 126</span>
 
 <span class='kw'>def</span> <span class='id app'>app</span><span class='lparen'>(</span><span class='id app'>app</span><span class='comma'>,</span> <span class='id options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
   <span class='id app'>app</span> <span class='op'>=</span> <span class='id app'>app</span><span class='period'>.</span><span class='id to_app'>to_app</span> <span class='kw'>if</span> <span class='id app'>app</span><span class='period'>.</span><span class='id respond_to?'>respond_to?</span> <span class='symbol'>:to_app</span>
@@ -435,9 +427,8 @@ Adds an rack-application to this node.
   
 </p><div class="docstring">
   <div class="discussion">
-    <p>
-Sets a default value for an option.
-</p>
+    
+<p>Sets a default value for an option.</p>
 
 
   </div>
@@ -451,12 +442,12 @@ Sets a default value for an option.
       <pre class="lines">
 
 
-409
-410
-411</pre>
+94
+95
+96</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 409</span>
+      <pre class="code"><span class="info file"># File 'lib/addressive/graph.rb', line 94</span>
 
 <span class='kw'>def</span> <span class='id default'>default</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span> <span class='id value'>value</span><span class='rparen'>)</span>
   <span class='ivar'>@spec_factory</span><span class='period'>.</span><span class='id defaults'>defaults</span><span class='lbracket'>[</span><span class='id name'>name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id value'>value</span>
@@ -479,9 +470,8 @@ Sets a default value for an option.
   
 </p><div class="docstring">
   <div class="discussion">
-    <p>
-Adds an edge from the current node to a node with the given name.
-</p>
+    
+<p>Adds an edge from the current node to a node with the given name.</p>
 
 
   </div>
@@ -524,9 +514,8 @@ Adds an edge from the current node to a node with the given name.
       
       
         
-        <div class='inline'><p>
-BlockBuilder
-</p>
+        <div class='inline'>
+<p>BlockBuilder</p>
 </div>
       
     </li>
@@ -539,13 +528,13 @@ BlockBuilder
       <pre class="lines">
 
 
-401
-402
-403
-404</pre>
+86
+87
+88
+89</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 401</span>
+      <pre class="code"><span class="info file"># File 'lib/addressive/graph.rb', line 86</span>
 
 <span class='kw'>def</span> <span class='id edge'>edge</span><span class='lparen'>(</span><span class='id as'>as</span> <span class='comma'>,</span> <span class='id name'>name</span> <span class='op'>=</span> <span class='id as'>as</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span>
   <span class='ivar'>@node</span><span class='period'>.</span><span class='id edges'>edges</span><span class='lbracket'>[</span><span class='id as'>as</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@network</span><span class='period'>.</span><span class='id build'>build</span><span class='period'>.</span><span class='id node'>node</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span><span class='op'>&amp;</span><span class='id block'>block</span><span class='rparen'>)</span><span class='period'>.</span><span class='id node'>node</span>
@@ -565,9 +554,8 @@ BlockBuilder
   
 </p><div class="docstring">
   <div class="discussion">
-    <p>
-Adds one or more uri specs for a given name.
-</p>
+    
+<p>Adds one or more uri specs for a given name.</p>
 
 
   </div>
@@ -581,13 +569,13 @@ Adds one or more uri specs for a given name.
       <pre class="lines">
 
 
-414
-415
-416
-417</pre>
+99
+100
+101
+102</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/addressive.rb', line 414</span>
+      <pre class="code"><span class="info file"># File 'lib/addressive/graph.rb', line 99</span>
 
 <span class='kw'>def</span> <span class='id uri'>uri</span><span class='lparen'>(</span><span class='id name'>name</span><span class='comma'>,</span><span class='op'>*</span><span class='id args'>args</span><span class='rparen'>)</span>
   <span class='ivar'>@node</span><span class='period'>.</span><span class='id uri_spec'>uri_spec</span><span class='lparen'>(</span><span class='id name'>name</span><span class='rparen'>)</span> <span class='op'>&lt;&lt;</span> <span class='ivar'>@spec_factory</span><span class='period'>.</span><span class='id convert'>convert</span><span class='lparen'>(</span><span class='id args'>args</span><span class='rparen'>)</span>
@@ -603,9 +591,9 @@ Adds one or more uri specs for a given name.
 </div>
     
     <div id="footer">
-  Generated on Wed Nov 16 14:02:08 2011 by 
+  Generated on Wed Nov 23 13:23:07 2011 by 
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.7.3 (ruby-1.9.2).
+  0.7.3 (ruby-1.9.3).
 </div>
 
   </body>
