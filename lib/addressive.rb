@@ -15,9 +15,9 @@
 #    (c) 2011 by Hannes Georg
 #
 
-#gem 'uri_template'
-$LOAD_PATH << File.expand_path('../../uri_template7/lib',File.dirname(__FILE__))
-require 'uri_template'
+$LOAD_PATH << File.expand_path('../../uri_template7/lib/',File.dirname(__FILE__))
+require File.expand_path('../../uri_template7/lib/uri_template',File.dirname(__FILE__))
+require 'ostruct'
 
 # Addressive is library which should make it possible for different rack-applications to live together on the same server.
 # To accomplish this, addressive supplies you with:
@@ -28,20 +28,43 @@ require 'uri_template'
 # What needs to be done by the apps:
 #   - Provide uri templates.
 #
-class Addressive < Struct.new(:node,:action,:variables, :spec)
+module Addressive
+
+  autoload :Static, 'addressive/static'
+  autoload :Request, 'addressive/request'
+  autoload :Router, 'addressive/router'
+  autoload :Graph, 'addressive/graph'
+
+  ADDRESSIVE_ENV_KEY = 'addressive'.freeze
+
+  class Error < StandardError
+  
+  end
 
   # This error is raised whenever no uri spec could be found.
-  class NoURISpecFound < StandardError
+  class NoURISpecFound < Error
     
     attr_reader :builder
     
     def initialize(builder)
       @builder = builder
-      super("No URISpec found for #{builder.inspect}.")
+      super("No URISpec found for #{builder.inspect}. Only got: #{builder.node.uri_specs.keys.join(', ')}")
+    end
+  
+  end
+  
+  class NoEdgeFound < Error
+  
+    attr_reader :node, :edge
+    
+    def initialize(node, edge)
+      @node, @edge = node, edge
+      super("No Edge '#{edge.inspect}' found, only got '#{node.edges.keys.map(&:inspect).join('\', \'')}'")
     end
   
   end
 
+  # A module for any class, which can create uris.
   module URIBuilder
   
     def self.new(*args)
@@ -66,7 +89,8 @@ class Addressive < Struct.new(:node,:action,:variables, :spec)
     #
     # @return URIBuilder
     def uri(*args)
-      hashes, path = args.partition{|x| x.kind_of? Hash}
+      return uri_builder_delegate.uri(*args) if uri_builder_delegate
+      hashes, path = args.collect_concat{|a| a.respond_to?(:to_addressive) ? a.to_addressive : [a] }.partition{|x| x.kind_of? Hash}
       node = self.node
       action = self.action
       if path.size >= 1
@@ -75,33 +99,11 @@ class Addressive < Struct.new(:node,:action,:variables, :spec)
       end
       derive_uri_builder(action, hashes.inject(self.variables || {}, &:merge), node)
     end
-  
-    # Actually creates the URI as a string
-    #
-    # @return String
-    def to_s
-      specs = self.uri_builder_specs
-      # if a.none? ????
-      if specs.none?
-        raise NoURISpecFound.new(self)
-      end
-      return specs.first.template.expand(self.variables || {}).to_s
-    end
     
-    def humanization_key
-      specs = self.uri_builder_specs
-      if specs.none?
-        return super
-      else
-        return specs.first.app._(:action,self.action,self.variables || {} )
-      end
-    end
+    private
     
-    def uri_builder_specs
-      return @specs ||= begin
-        varnames = (self.variables || {} ).keys
-        self.node.uri_spec(self.action).select{|s| s.valid? and (s.variables - varnames).none? }.sort_by{|s| (varnames - s.variables).size }
-      end
+    def uri_builder_delegate
+      nil
     end
   
   end
@@ -113,6 +115,7 @@ class Addressive < Struct.new(:node,:action,:variables, :spec)
 
     attr_reader :origin,:node,:variables,:action
 
+    # @private
     def initialize(origin, action=:default, vars={}, node=origin)
       @origin = origin
       @node = node
@@ -124,10 +127,36 @@ class Addressive < Struct.new(:node,:action,:variables, :spec)
     def inspect
       '<URIBuilder '+self.action.inspect+' '+self.variables.inspect+'>'
     end
-
+    
+    # Actually creates the URI as a string
+    #
+    # @return String
+    def to_s
+      return uri_builder_delegate.to_s if uri_builder_delegate
+      specs = uri_builder_specs
+      # if a.none? ????
+      if specs.none?
+        raise NoURISpecFound.new(self)
+      end
+      return specs.first.template.expand(self.variables || {}).to_s
+    end
+    
+    def humanization_key
+      specs = uri_builder_specs
+      if specs.none?
+        return super
+      else
+        return specs.first.app._(:action,self.action,self.variables || {} )
+      end
+    end
+  private
+    def uri_builder_specs
+      return @specs ||= begin
+        varnames = (self.variables || {} ).keys
+        self.node.uri_spec(self.action).select{|s| s.valid? and (s.variables - varnames).none? }.sort_by{|s| (varnames - s.variables).size }
+      end
+    end
   end
-  
-  require 'ostruct'
   
   # A specification is a combination of an URI template and some meta-data ( like the app this spec belongs to ).
   class URISpec < OpenStruct
@@ -145,6 +174,10 @@ class Addressive < Struct.new(:node,:action,:variables, :spec)
     def initialize(template, *args)
       @template = template
       super(*args)
+    end
+    
+    def inspect
+      ['#<',self.class.name,': ',template.inspect,*@table.map{|k,v| " #{k}=#{v.inspect}"},'>'].join
     end
     
   end
@@ -179,8 +212,10 @@ class Addressive < Struct.new(:node,:action,:variables, :spec)
       if defaults.key? :app 
         spec.app = defaults[:app]
       end
-      if defaults[:prefix]
-        spec.template = URITemplate.apply( defaults[:prefix] , :/ ,  spec.template)
+      unless spec.template.absolute?
+        if defaults[:prefix]
+          spec.template = URITemplate.apply( defaults[:prefix] , :/ ,  spec.template)
+        end
       end
       return spec
     end
@@ -225,15 +260,11 @@ class Addressive < Struct.new(:node,:action,:variables, :spec)
     def <<(*args)
       args = args.flatten
       fails = args.select{|a| !a.kind_of? URISpec }
-      raise "Expected to receive only URISpecs but, got #{fails.map(&:inspect).join(', ')}" if fails.size != 0
+      raise ArgumentError, "Expected to receive only URISpecs but, got #{fails.map(&:inspect).join(', ')}" if fails.size != 0
       @specs.push( *args )
     end
     
     alias push <<
-    
-    def export
-      self.map(&:export)
-    end
   
   end
   
@@ -251,12 +282,15 @@ class Addressive < Struct.new(:node,:action,:variables, :spec)
     attr_reader :edges, :meta, :uri_specs
     attr_reader :apps
     attr_accessor :defaults
+    
+    include URIBuilder
   
     def initialize
       @edges = {}
       @meta = {}
       @apps = []
       @uri_specs = Hash.new{|hsh,name| hsh[name]=URISpecList.new(@defaults) }
+      @uri_builder_delegate = URIBuilder.new(self)
     end
     
     # Traverses some edges to another ( or the same ) node.
@@ -277,17 +311,12 @@ class Addressive < Struct.new(:node,:action,:variables, :spec)
       if edges[args.first].kind_of? Addressive::Node
         return edges[args.first].traverse(*args[1..-1])
       else
-        raise ArgumentError, "Can't traverse to #{args.first.inspect}, only got #{edges.keys.inspect}."
+        raise NoEdgeFound.new(self, args.first)
       end
     end
     
     def uri_spec(name)
       @uri_specs[name]
-    end
-    
-    # Shorthand to generate an URIBuilder for this Node.
-    def uri(*args)
-      URIBuilder.new(self).uri(*args)
     end
     
     def inspect
@@ -297,314 +326,79 @@ class Addressive < Struct.new(:node,:action,:variables, :spec)
         super
       end 
     end
+    
+  private
+    def uri_builder_delegate
+      @uri_builder_delegate
+    end
   
   end
   
-  # A network is basically a hash of nodes and some builder methods.
-  # Networks are only used to generate nodes and their relations.
-  # They will be GCed when they are done.
-  class Network
-    
-    # An app builder is used to add uris for a certain app to a node.
-    class AppBuilder
-    
-      # @private
-      def initialize(node, factory, app)
-        @node = node
-        @app = app
-        @spec_factory = factory
-      end
-      
-      # Sets a default value for an option.
-      def default(name, value)
-        @spec_factory.defaults[name] = value
-      end
-      
-      # Adds one or more uri specs for a given name. It uses the current app as the default app for all specs.
-      def uri(name,*args)
-        specs = @node.uri_spec(name)
-        specs << @spec_factory.convert(*args)
-        return specs
-      end
-    
-    end
-    
-    # A NodeBuilder is used to build a Node inside a Network.
-    # This class should not be generated directly, it's created for you by {Builder#node}.
-    class NodeBuilder
-  
-      attr_reader :node
-      
-      # @private
-      def initialize(network,node)
-        @network = network
-        @node = node
-        @spec_factory = network.spec_factory.derive({})
-      end
-      
-      # Adds an edge from the current node to a node with the given name.
-      # 
-      # @example
-      #   nw = Addressive::Network.new{
-      #     #create a node named :app_a
-      #     node :app_a do
-      #       # Creates an edge to the node named :app_b. The name of the edge will be :app_b, too.
-      #       edge :app_b 
-      #
-      #       # Creates another edge to the node named :app_b with edge name :app_c.
-      #       edge :app_c, :app_b
-      #
-      #       # Edge takes a block. Same behavior as Builder#node.
-      #       edge :app_d do
-      #         
-      #         edge :app_a
-      #       
-      #       end
-      #     end
-      #   }
-      #   # :app_a now references :app_b twice, :app_d once and is referenced only by :app_d.
-      #
-      # @yield BlockBuilder
-      #
-      def edge(as , name = as, &block)
-        @node.edges[as] = @network.build.node(name,&block).node
-        return self
-      end
-      
-      alias ref edge
-      
-      # Sets a default value for an option.
-      def default(name, value)
-        @spec_factory.defaults[name] = value
-      end
-      
-      # Adds one or more uri specs for a given name.
-      def uri(name,*args)
-        @node.uri_spec(name) << @spec_factory.convert(args)
-        return @node.uri_spec(name)
-      end
-      
-      # Adds an rack-application to this node.
-      #
-      # @example
-      #
-      #   Addressive::Network.new{
-      #     
-      #     node :a_node do
-      #       
-      #       app lambda{|env| [200,{},['App 1']]} do
-      #         uri :show, '/a_node/app1'
-      #       end
-      #       
-      #       app lambda{|env| [200,{},['App 2']]} do
-      #         uri :show, '/a_node/app2'
-      #       end
-      #     
-      #     end
-      #   
-      #   }
-      #
-      # @yield {AppBuilder}
-      # @return {AppBuilder}
-      def app(app, options = {}, &block)
-        app = app.to_app if app.respond_to? :to_app
-        sf = @spec_factory.derive(options.merge(:app=>app))
-        builder = AppBuilder.new(@node,sf,app)
-        if block
-          if block.arity == 1
-            yield builder
-          else
-            builder.instance_eval(&block)
-          end
-        end
-        unless @node.apps.include? app
-          @node.apps << app
-          if app.respond_to? :generate_uri_specs
-            app.generate_uri_specs(builder)
-          end
-        end
-        return builder
-      end
-      
-    end
-  
-    # A Builder is used to construct a network.
-    # It's here so that a {Network} can have only read methods, while a {Builder} does the heavy lifting.
-    # This class should not be generated directly, it's created for you by {Network#build} and {Network#initialize}.
-    class Builder
-      
-      # @private
-      def initialize(network)
-        @network = network
-      end
-    
-      # Creates or edits the node with the given name in the current network and yields and returns a NodeBuilder.
-      # This NodeBuilder can then be use to actually describe the node.
-      #
-      # @yield {NodeBuilder}
-      # @return {NodeBuilder}
-      def node(name, &block)
-        n = @network.node(name)
-        if block
-          if block.arity == 1
-            yield @network.node_builder_class.new(@network, n)
-          else
-            @network.node_builder_class.new(@network, n).instance_eval(&block)
-          end
-        end
-        return @network.node_builder_class.new(@network, n)
-      end
-      
-      # Sets a network-wide default.
-      # @note
-      #   Only nodes created after this default has been set will receive this value.
-      #
-      def default(name,value)
-        @network.spec_factory.defaults[name]=value
-      end
-    
-    end
-    
-    # @private
-    def configure(node)
-      return node
-    end
-
-    # @private
-    attr_reader :node_class, :node_builder_class, :spec_factory
-    
-    # Creates a new Network.
-    # @yield {Builder}
-    def initialize(&block)
-      @defaults = {}
-      @node_class = Class.new(Node)
-      @node_builder_class = Class.new(NodeBuilder)
-      @spec_factory = URISpecFactory.new({})
-      @nodes = Hash.new{|hsh, name| hsh[name] = configure(node_class.new) }
-      build(&block)
-    end
-    
-    # Creates, yields and returns a {Builder} for this network.
-    #
-    # @yield {Builder}
-    # @return {Builder}
-    def build(&block)
-      if block
-        if block.arity == 1
-          yield Builder.new(self)
-        else
-          Builder.new(self).instance_eval(&block)
-        end
-      end
-      return Builder.new(self)
-    end
-    
-    # Return the node with the given name.
-    # @note
-    #   A Network will automatically create nodes if they don't exists.
-    def [](name)
-      return @nodes[name]
-    end
-  
-    alias node []
-  
-  end
-  
-  def Network(&block)
-    return Network.new(&block)
-  end
-  
-  alias graph Network
-
-  include URIBuilder
-  
-=begin
-  # Later ...
-  class Request < Rack::Request
-  
-    def GET
-      if @env['addressive']
-        return @env['addressive'].variables
-      else
-        super
-      end
-    end
-    
-    def uri(*args)
-      if @env['addressive']
-        @env['addressive'].uri(*args)
-      else
-        self.url
-      end
-    end
-    
-  end
-=end
-  
-  # A router which can be used as a rack application and routes requests to nodes and their apps.
+  # Creates a new node and yields a builder for it
   #
-  class Router
+  # This method makes it easy to create a tree-like structur by implictly creating and returning a root node ( by default called :root ). This should be used in most cases, as you will likely have just one connected component in an addressive graph. For complexer graphs you can use {Addressive#graph}.
+  #
+  # @example
+  #   node = Addressive.node do 
+  #     edge( :another ) do
+  #       default :prefix, '/another'
+  #       uri :default ,'/'
+  #     end
+  #     uri :default ,'/'
+  #   end
+  #   
+  #   node.uri.to_s #=> '/'
+  #   node.uri(:another,:default).to_s #=> '/another/'
+  #
+  # @param name [Symbol] a name for this node
+  # @yield {NodeBuilder}
+  # @return {Graph}
+  #
+  def self.node(name=:root,&block)
+    Graph.new{ |bldr|
+      bldr.node name, &block
+    }[name]
+  end
   
-    attr_reader :routes, :actions
-  
-    def initialize()
-      @routes = []
-      @actions = {}
-    end
-    
-    # Add a nodes specs to this router.
-    def add(node)
-      node.uri_specs.each do |action, specs|
-        specs.each do |spec|
-          if spec.valid? and spec.app and spec.route != false
-            @routes << spec
-            @actions[spec] = [node, action]
-          end
-        end
-      end
-      @routes.sort_by!{|spec| spec.template.static_characters }.reverse!
-    end
-    
-    # Routes the env to an app and it's node.
-    def call(env)
-      path = env['PATH_INFO'] + (env['QUERY_STRING'].to_s.length > 0 ? '?'+env['QUERY_STRING'] : '')
-      best_match = nil
-      best_size = 1.0 / 0
-      l = env['rack.logger']
-      if l
-        l.debug('Addressive') do
-          "### Start: #{path.inspect}"
-        end
-      end
-      matches = @routes.to_enum.map{|spec| [spec, spec.template.extract(path)] }.reject{|_,v| v.nil?}
-      if matches.empty?
-        return not_found(env)
-      else
-        if l
-          l.debug('Addressive') do
-            matches.each do |spec,variables|
-              "# found: #{spec.template.pattern.inspect} with #{variables.inspect}"
-            end
-          end
-        end
-        spec, variables = matches.first
-        node, action = @actions[spec]
-        env['addressive']=Addressive.new(node, action, variables, spec)
-        return spec.app.call(env)
-      end
-    end
-  
-    # This method is called when no route was found.
-    # You may override this as you wish.
-    def not_found(env)
-      [404,{'Content-Type'=>'text/plain'},['Ooooopppps 404!']]
-    end
-    
-    # @private
-    def to_app
-      return self
-    end
-  
+  # Creates a new graph and yields a builder for it
+  #
+  # This is good, if you want to create a graph with disconnected nodes or multiple root-nodes.
+  #
+  # @example
+  #   graph = Addressive.graph do
+  #     
+  #     node :shared do
+  #       uri :default, '/shared'
+  #     end
+  #     
+  #     node :foo do
+  #       uri :default ,'/foo'
+  #       edge :shared
+  #     end
+  #     
+  #     node :bar do
+  #       uri :default, '/bar'
+  #       edge :shared
+  #     end
+  #     
+  #   end
+  #   
+  #   # You can then get the nodes with {Addressive::Graph.[]}
+  #   graph[:foo].uri.to_s #=> '/foo'
+  #   graph[:bar].uri.to_s #=> '/bar'
+  #   # :foo and :bar can both reach :shared, but not each other.
+  #   # Neither can :shared reach any other node.
+  #   graph[:foo].traverse(:shared) #=> graph[:shared]
+  #   graph[:bar].traverse(:shared) #=> graph[:shared]
+  #   graph[:foo].traverse(:bar) #!> Addressive::NoEdgeFound
+  #   graph[:shared].traverse(:bar) #!> Addressive::NoEdgeFound
+  #
+  # @yield {Builder}
+  # @return {Node}
+  #
+  def self.graph(&block)
+    Graph.new(&block)
   end
 
 end
+
