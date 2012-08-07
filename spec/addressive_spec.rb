@@ -237,8 +237,8 @@ describe Addressive do
       r.seal!
       
       r.routes[0].template.should_receive(:extract).exactly(1).times.and_return({'foo'=>'xxx'})
-      r.routes[1].template.should_receive(:extract).exactly(0).times.and_return({'foo'=>'xxx'})
-      r.routes[2].template.should_receive(:extract).exactly(0).times.and_return({'foo'=>'xxx'})
+      r.routes[1].template.should_not_receive(:extract)
+      r.routes[2].template.should_not_receive(:extract)
       
       result = Rack::MockRequest.new(r).get('http://foo.bar/xxx')
       result.status.should == 200
@@ -267,9 +267,9 @@ describe Addressive do
       
       r.seal!
       
-      r.routes[0].template.should_receive(:extract).exactly(0).times.and_return({'bar'=>'xxx'})
+      r.routes[0].template.should_not_receive(:extract)
       r.routes[1].template.should_receive(:extract).exactly(1).times.and_return({'ar'=>'xxx'})
-      r.routes[2].template.should_receive(:extract).exactly(0).times.and_return({'bar'=>'xxx'})
+      r.routes[2].template.should_not_receive(:extract)
       
       result = Rack::MockRequest.new(r).get('http://foo.bar/xxx')
     
@@ -297,9 +297,9 @@ describe Addressive do
       
       r.seal!
       
-      r.routes[0].template.should_receive(:extract).exactly(0).times.and_return({'bar'=>'xxx'})
+      r.routes[0].template.should_not_receive(:extract)
       r.routes[1].template.should_receive(:extract).exactly(1).times.and_return({'oo'=>'xxx'})
-      r.routes[2].template.should_receive(:extract).exactly(0).times.and_return({'bar'=>'xxx'})
+      r.routes[2].template.should_not_receive(:extract)
       
       result = Rack::MockRequest.new(r).get('http://foo.bar/xxx')
     
@@ -377,10 +377,10 @@ describe Addressive do
       sio = StringIO.new(str)
       
       f1 = Rack::MockRequest.new(router).get( 'http://foo.bar/foo/../afile.ext' )
-      f1.status.should == 403
+      f1.status.should >= 400
       
       f1 = Rack::MockRequest.new(router).get( 'http://foo.bar/foo/%2e%2e/afile.ext' )
-      f1.status.should == 403
+      f1.status.should >= 400
     
     end
     

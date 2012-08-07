@@ -31,7 +31,7 @@ module Addressive
   #   # Create a file, so this won't be a 404:
   #   File.new('/tmp/baz','w').close
   #   router = Addressive::Router.new.add(node)
-  #   status,headers,body = router.call('rack.url_scheme'=>'http','PATH_INFO'=>'/baz','HTTP_HOST'=>'example.example')
+  #   status,headers,body = router.call('rack.url_scheme'=>'http','PATH_INFO'=>'/baz','HTTP_HOST'=>'example.example','REQUEST_METHOD'=>'GET')
   #   body.class #=> Rack::File
   #   body.path #=> "/tmp/baz"
   #

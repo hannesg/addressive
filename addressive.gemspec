@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   
   s.files = Dir.glob('lib/**/**/*.rb') + ['addressive.gemspec']
   
-  s.add_dependency 'uri_template', '~> 0.1.4'
+  s.add_dependency 'uri_template', '~> 0.4.0'
   
   s.add_development_dependency 'simplecov'
   s.add_development_dependency 'rspec'

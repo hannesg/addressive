@@ -15,8 +15,7 @@
 #    (c) 2011 by Hannes Georg
 #
 
-$LOAD_PATH << File.expand_path('../../uri_template7/lib/',File.dirname(__FILE__))
-require File.expand_path('../../uri_template7/lib/uri_template',File.dirname(__FILE__))
+require 'uri_template'
 require 'ostruct'
 
 # Addressive is library which should make it possible for different rack-applications to live together on the same server.
