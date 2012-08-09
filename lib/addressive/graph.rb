@@ -38,7 +38,13 @@ module Addressive
       end
       
       # Adds one or more uri specs for a given name. It uses the current app as the default app for all specs.
-      def uri(name,*args)
+      def uri(name_or_uri,*args)
+        if name_or_uri.kind_of? Symbol
+          name = name_or_uri
+        else
+          name = DEFAULT_ACTION
+          args.unshift( name_or_uri )
+        end
         specs = @node.uri_spec(name)
         specs << @spec_factory.convert(*args)
         return specs
@@ -96,8 +102,14 @@ module Addressive
       end
       
       # Adds one or more uri specs for a given name.
-      def uri(name,*args)
-        @node.uri_spec(name) << @spec_factory.convert(args)
+      def uri(name_or_uri,*args)
+        if name_or_uri.kind_of? Symbol
+          name = name_or_uri
+        else
+          name = DEFAULT_ACTION
+          args.unshift( name_or_uri )
+        end
+        @node.uri_spec(name) << @spec_factory.convert(*args)
         return @node.uri_spec(name)
       end
       

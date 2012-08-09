@@ -151,7 +151,7 @@ describe Addressive do
       def call(env)
       # This is not so rack-compatible.
       # But for testing, it's okay
-        return [ 200, {}, [@name] ]
+        return [ 200, {}, [@name + ' - ' + env['addressive'].action.to_s] ]
       end
 
       def generate_uri_specs(builder)
@@ -159,6 +159,8 @@ describe Addressive do
         builder.uri :show, '/show/{x}', '/{x}'
       
         builder.uri :new, '/new'
+
+        builder.uri '', '/'
       
       end
 
@@ -205,17 +207,21 @@ describe Addressive do
       
       app = Rack::MockRequest.new(router)
       
-      app.get('http://www.example.com/app_a/show/3').body.should == 'A'
-    
-      app.get('http://www.example.com/backend/show/5').body.should == 'C'
+      app.get('http://www.example.com/app_a/show/3').body.should == 'A - show'
+
+      app.get('http://www.example.com/app_a').body.should == 'A - default'
+
+      app.get('http://www.example.com/app_a/').body.should == 'A - default'
+
+      app.get('http://www.example.com/backend/show/5').body.should == 'C - show'
       
-      app.get('http://www.example.com/backend/new').body.should == 'C'
+      app.get('http://www.example.com/backend/new').body.should == 'C - new'
       
-      app.get('http://www.example.com/backend/newz').body.should == 'C'
+      app.get('http://www.example.com/backend/newz').body.should == 'C - show'
       
-      app.get('http://www.example.com/backend/do/5').body.should == 'D'
+      app.get('http://www.example.com/backend/do/5').body.should == 'D - show'
       
-      app.get('http://www.example.com/backend/do/new').body.should == 'D'
+      app.get('http://www.example.com/backend/do/new').body.should == 'D - new'
       
     end
     

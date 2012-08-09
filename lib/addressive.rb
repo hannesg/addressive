@@ -36,6 +36,8 @@ module Addressive
 
   ADDRESSIVE_ENV_KEY = 'addressive'.freeze
 
+  DEFAULT_ACTION = :default
+
   class Error < StandardError
   
   end
@@ -47,7 +49,7 @@ module Addressive
     
     def initialize(builder)
       @builder = builder
-      super("No URISpec found for #{builder.inspect}. Only got: #{builder.node.uri_specs.keys.join(', ')}")
+      super("No URISpec found for #{builder.inspect}. Only got: #{builder.node.uri_specs.keys.map(&:inspect).join(', ')}")
     end
   
   end
@@ -82,6 +84,12 @@ module Addressive
     # 
     # @example
     #   node = Addressive::Node.new
+    #   node.uri_spec << Addressive::URISpec.new( URITemplate.new('/an/uri/with/{var}') )
+    #   bldr = Addressive::URIBuilder.new(node)
+    #   bldr.uri('var'=>'VAR!').to_s #=> '/an/uri/with/VAR%21'
+    #
+    # @example
+    #   node = Addressive::Node.new
     #   node.uri_spec(:show) << Addressive::URISpec.new( URITemplate.new('/an/uri/with/{var}') )
     #   bldr = Addressive::URIBuilder.new(node)
     #   bldr.uri(:show, 'var'=>'VAR!').to_s #=> '/an/uri/with/VAR%21'
@@ -94,7 +102,12 @@ module Addressive
       action = self.action
       if path.size >= 1
         node = node.traverse(*path[0..-2])
-        action = path.last
+        if node.edge? path.last
+          node = node.traverse(path.last)
+          action = DEFAULT_ACTION
+        else
+          action = path.last
+        end
       end
       derive_uri_builder(action, hashes.inject(self.variables || {}, &:merge), node)
     end
@@ -115,7 +128,7 @@ module Addressive
     attr_reader :origin,:node,:variables,:action
 
     # @private
-    def initialize(origin, action=:default, vars={}, node=origin)
+    def initialize(origin, action=DEFAULT_ACTION, vars={}, node=origin)
       @origin = origin
       @node = node
       @action = action
@@ -313,8 +326,17 @@ module Addressive
         raise NoEdgeFound.new(self, args.first)
       end
     end
-    
-    def uri_spec(name)
+
+    def edge?(name)
+      return edges.key?(name)
+    end
+
+    def uri_spec?(name = DEFAULT_ACTION)
+      @uri_specs.key? name
+    end
+
+
+    def uri_spec(name = DEFAULT_ACTION)
       @uri_specs[name]
     end
     
@@ -341,13 +363,13 @@ module Addressive
   #   node = Addressive.node do 
   #     edge( :another ) do
   #       default :prefix, '/another'
-  #       uri :default ,'/'
+  #       uri '/'
   #     end
-  #     uri :default ,'/'
+  #     uri '/'
   #   end
   #   
   #   node.uri.to_s #=> '/'
-  #   node.uri(:another,:default).to_s #=> '/another/'
+  #   node.uri(:another).to_s #=> '/another/'
   #
   # @param name [Symbol] a name for this node
   # @yield {NodeBuilder}
