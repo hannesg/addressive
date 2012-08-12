@@ -47,7 +47,7 @@ class Addressive::NativeImplementationMatcher
 end
 
 RSpec::Matchers.class_eval do
-  def native
+  def be_native
     return Addressive::NativeImplementationMatcher.new
   end
 end

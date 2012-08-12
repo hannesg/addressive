@@ -1,4 +1,3 @@
-require File.expand_path('./helper', File.dirname(__FILE__))
 require 'addressive'
 require 'weakref'
 require 'stringio'
@@ -451,7 +450,7 @@ describe Addressive do
   describe "backports" do
 
     it "should not use the backports on 1.9.3", :if => (RUBY_VERSION > "1.9") do
-      [].method(:collect_concat).should native
+      [].method(:collect_concat).should be_native
     end
 
   end
