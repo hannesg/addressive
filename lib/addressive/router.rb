@@ -17,6 +17,7 @@
 
 require 'rack/request'
 require 'thread'
+require 'enumerator'
 
 module Addressive
 
@@ -36,6 +37,8 @@ module Addressive
       # @private
       class Direct < self
       
+        Enumerator = defined?(::Enumerator) ? ::Enumerator : Enumerable::Enumerator
+
         class EachingProc < Proc
         
           def initialize(routes)
@@ -72,15 +75,15 @@ module Addressive
         
         def done!
           # compile *gnihihi*
-          code = ['def each(path,uri); routes = Enumerator.new(@routes);',
-            *@routes.each_with_index.map{|r,i|
+          code = ( ['def each(path,uri); routes = Enumerator.new(@routes);'] +
+            @routes.each_with_index.map{|r,i|
               "route = routes.next
               vars = route.template.extract(#{r.template.absolute? ? 'uri' : 'path'})
               if vars
                 yield( route, vars, #{i+1} )
               end
               "
-            } ,'; end'].join
+            } + [ '; end']).join
           instance_eval(code)
         end
         
@@ -323,9 +326,9 @@ module Addressive
       return unless @immaterial
       @mutex.synchronize do
         return unless @immaterial
-        @routes.sort_by!{|spec| spec.template.static_characters }.reverse!
+        routes = @routes.sort_by{|spec| [ -spec.template.static_characters, spec.variables.size ] }
         @tree.clear!
-        @routes.each do |spec|
+        routes.each do |spec|
           @tree << spec
         end
         @tree.done!

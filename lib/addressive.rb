@@ -18,6 +18,8 @@
 require 'uri_template'
 require 'ostruct'
 
+require File.expand_path('addressive/backports', File.dirname(__FILE__))
+
 # Addressive is library which should make it possible for different rack-applications to live together on the same server.
 # To accomplish this, addressive supplies you with:
 #   - A model for a graph in which each node is one application.
@@ -97,7 +99,8 @@ module Addressive
     # @return URIBuilder
     def uri(*args)
       return uri_builder_delegate.uri(*args) if uri_builder_delegate
-      hashes, path = args.collect_concat{|a| a.respond_to?(:to_addressive) ? a.to_addressive : [a] }.partition{|x| x.kind_of? Hash}
+      argz = args.collect_concat{|a| a.respond_to?(:to_addressive) ? a.to_addressive : [a] }
+      hashes, path = argz.partition{|x| x.kind_of? Hash}
       node = self.node
       action = self.action
       if path.size >= 1
@@ -189,7 +192,7 @@ module Addressive
     end
     
     def inspect
-      ['#<',self.class.name,': ',template.inspect,*@table.map{|k,v| " #{k}=#{v.inspect}"},'>'].join
+      ( ['#<',self.class.name,': ',template.inspect ] + @table.map{|k,v| " #{k}=#{v.inspect}"} + ['>'] ).join
     end
     
   end
