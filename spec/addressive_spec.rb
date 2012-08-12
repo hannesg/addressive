@@ -61,7 +61,7 @@ describe Addressive do
       
       GC.start
       
-      ref.should_not be_weakref_alive
+      ref.weakref_alive?.should_not be_true
       node.should be_kind_of(Addressive::Node)
     
     end
@@ -223,6 +223,32 @@ describe Addressive do
       
       app.get('http://www.example.com/backend/do/new').body.should == 'D - new'
       
+    end
+
+    it "should work if two routes are somewhat similiar" do
+
+      received_args = []
+
+      node = Addressive.node do
+
+        default :app, lambda{|env| received_args << env['addressive'].variables ; [404,{},[""]]}
+
+        uri '/object/{id}'
+
+        uri '/object/{?query*}'
+
+      end
+
+      router = Addressive::Router.new
+
+      router.add( node )
+
+      app = Rack::MockRequest.new(router)
+
+      app.get('/object/?foo.bar=baz')
+
+      received_args.should == [{'query' => {'foo.bar'=>'baz'}}]
+
     end
     
     it "should only extract as many as necessary" do

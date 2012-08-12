@@ -77,7 +77,7 @@ module Addressive
               "route = routes.next
               vars = route.template.extract(#{r.template.absolute? ? 'uri' : 'path'})
               if vars
-                yield( route, vars, #{i} )
+                yield( route, vars, #{i+1} )
               end
               "
             } ,'; end'].join
@@ -225,9 +225,9 @@ module Addressive
       l = env['rack.logger']
       db = l ? l.method(:debug) : DEBUG_NULL
       db.call(DEBUG_NAME) do
-        "[ ? ] #{rr.url.inspect}"
+        "[ ? ] url: #{rr.url.inspect}, path: #{rr.fullpath.inspect}"
       end
-      matches = routes_for(rr.path, rr.url)
+      matches = routes_for(rr.fullpath, rr.url)
       result = nil
       matches.each do |addressive|
         env[ADDRESSIVE_ENV_KEY] = addressive
