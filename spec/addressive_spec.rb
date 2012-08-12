@@ -45,7 +45,7 @@ describe Addressive do
     
     end
     
-    it "should be garbage collectable" do
+    it "should be garbage collectable", :if => (RUBY_DESCRIPTION =~ /\Aruby /) do
     
       def generate
         return WeakRef.new(Addressive.graph{
@@ -283,23 +283,30 @@ describe Addressive do
           Addressive::Router::Tree::Direct.new,
           Addressive::Router::Tree::Direct.new )
         )
+
+      templates = [
+        URITemplate.new('/bar/{bar}'),
+        URITemplate.new('/{bar}'),
+        URITemplate.new('/b{ar}')
+      ]
+
       n = Addressive.node do
       
         default :app, lambda{|env| [200,{},[]] }
       
-        uri :foo ,'/bar/{bar}'
-        uri :bar ,'/{bar}'
-        uri :baz ,'/b{ar}'
+        uri :foo ,templates[0]
+        uri :bar ,templates[1]
+        uri :baz ,templates[2]
         
       end
       
       r.add(n)
       
       r.seal!
-      
-      r.routes[0].template.should_not_receive(:extract)
-      r.routes[1].template.should_not_receive(:extract)
-      r.routes[2].template.should_receive(:extract).exactly(1).times.and_return({'ar'=>'xx'})
+
+      templates[0].should_not_receive(:extract)
+      templates[1].should_not_receive(:extract)
+      templates[2].should_receive(:extract).exactly(1).times.and_return({'ar'=>'xx'})
       
       result = Rack::MockRequest.new(r).get('http://foo.bar/bxx')
     
@@ -313,13 +320,20 @@ describe Addressive do
           Addressive::Router::Tree::Direct.new,
           Addressive::Router::Tree::Direct.new )
         )
+
+      templates = [
+        URITemplate.new('/bar/{bar}'),
+        URITemplate.new('/{bar}'),
+        URITemplate.new('/x{oo}')
+      ]
+
       n = Addressive.node do
       
         default :app, lambda{|env| [200,{},[]] }
       
-        uri :foo ,'/bar/{bar}'
-        uri :bar ,'/{bar}'
-        uri :baz ,'/x{oo}'
+        uri :foo ,templates[0]
+        uri :bar ,templates[1]
+        uri :baz ,templates[2]
         
       end
       
@@ -327,9 +341,9 @@ describe Addressive do
       
       r.seal!
       
-      r.routes[0].template.should_not_receive(:extract)
-      r.routes[1].template.should_not_receive(:extract)
-      r.routes[2].template.should_receive(:extract).exactly(1).times.and_return({'oo'=>'xxx'})
+      templates[0].should_not_receive(:extract)
+      templates[1].should_not_receive(:extract)
+      templates[2].should_receive(:extract).exactly(1).times.and_return({'oo'=>'xxx'})
       
       result = Rack::MockRequest.new(r).get('http://foo.bar/xxx')
     
