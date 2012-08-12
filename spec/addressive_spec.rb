@@ -113,9 +113,9 @@ describe Addressive do
     
       o = Object.new
       def o.to_addressive
-        return :show, {'arg_a'=>'foo'}
+        return [:show, {'arg_a'=>'foo'}]
       end
-      
+
       @nw[:frontend].uri(o).to_s.should ==  '/arg_a/foo'
     
     end
@@ -160,7 +160,7 @@ describe Addressive do
       
         builder.uri :new, '/new'
 
-        builder.uri '', '/'
+        builder.uri '/'
       
       end
 
@@ -208,8 +208,6 @@ describe Addressive do
       app = Rack::MockRequest.new(router)
       
       app.get('http://www.example.com/app_a/show/3').body.should == 'A - show'
-
-      app.get('http://www.example.com/app_a').body.should == 'A - default'
 
       app.get('http://www.example.com/app_a/').body.should == 'A - default'
 
@@ -300,10 +298,10 @@ describe Addressive do
       r.seal!
       
       r.routes[0].template.should_not_receive(:extract)
-      r.routes[1].template.should_receive(:extract).exactly(1).times.and_return({'ar'=>'xxx'})
-      r.routes[2].template.should_not_receive(:extract)
+      r.routes[1].template.should_not_receive(:extract)
+      r.routes[2].template.should_receive(:extract).exactly(1).times.and_return({'ar'=>'xx'})
       
-      result = Rack::MockRequest.new(r).get('http://foo.bar/xxx')
+      result = Rack::MockRequest.new(r).get('http://foo.bar/bxx')
     
     end
     
@@ -330,8 +328,8 @@ describe Addressive do
       r.seal!
       
       r.routes[0].template.should_not_receive(:extract)
-      r.routes[1].template.should_receive(:extract).exactly(1).times.and_return({'oo'=>'xxx'})
-      r.routes[2].template.should_not_receive(:extract)
+      r.routes[1].template.should_not_receive(:extract)
+      r.routes[2].template.should_receive(:extract).exactly(1).times.and_return({'oo'=>'xxx'})
       
       result = Rack::MockRequest.new(r).get('http://foo.bar/xxx')
     
@@ -433,7 +431,16 @@ describe Addressive do
     end
   
   end
-  
+
+
+  describe "backports" do
+
+    it "should not use the backports on 1.9.3", :if => (RUBY_VERSION > "1.9") do
+      [].method(:collect_concat).source_location.should be_nil
+    end
+
+  end
+
   describe "docs" do
   
     gem 'yard'
