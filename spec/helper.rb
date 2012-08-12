@@ -21,7 +21,33 @@ require "bundler/setup"
 
 Bundler.require(:default,:development)
 
-gem 'simplecov'
-require 'simplecov'
-SimpleCov.add_filter('spec')
-SimpleCov.start
+begin
+  require 'simplecov'
+  SimpleCov.add_filter('spec')
+  SimpleCov.start
+rescue LoadError
+  warn 'Not using simplecov.'
+end
+
+class Addressive::NativeImplementationMatcher
+
+  def matches?( actual )
+    @actual = actual
+    return true if @actual.source_location.nil?
+    if RUBY_DESCRIPTION =~ /\Arubinius /
+      return @actual.source_location[0] =~ /\Akernel\//
+    end
+    return false
+  end
+
+  def failure_message_for_should
+    return [@actual.inspect, ' should be natively implemented, but was found in ', @actual.source_location.inspect ].join 
+  end
+
+end
+
+RSpec::Matchers.class_eval do
+  def native
+    return Addressive::NativeImplementationMatcher.new
+  end
+end
