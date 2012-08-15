@@ -67,6 +67,26 @@ describe Addressive do
     end
   
   end
+
+  describe Addressive::URISpecFactory do
+
+    it "should moarn if :rewrite is present but not callable" do
+
+      expect{ Addressive::URISpecFactory.new(:rewrite => Object.new) }.to raise_error(ArgumentError)
+
+    end
+
+    it "should rewrite templates if requested" do
+
+      factory = Addressive::URISpecFactory.new(:rewrite => lambda{|tpl| URITemplate.new('/foo') } )
+
+      specs = factory.convert('/bar')
+      specs.should have(1).item
+      specs.first.template.should == '/foo'
+
+    end
+
+  end
   
   describe Addressive::URIBuilder do
   

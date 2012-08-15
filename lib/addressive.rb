@@ -232,14 +232,18 @@ module Addressive
           spec.template = URITemplate.apply( defaults[:prefix] , :/ ,  spec.template)
         end
       end
+      if defaults[:rewrite]
+        spec.template = defaults[:rewrite].call(spec.template)
+      end
       return spec
     end
   
     attr_reader :defaults
     
     def initialize(defaults, parent = nil)
-      @defaults = defaults
+      @defaults = defaults.dup
       @parent = parent
+      validate!
     end
     
     def convert(*args)
@@ -251,9 +255,17 @@ module Addressive
     def all_defaults
       @parent ? @parent.all_defaults.merge(defaults) : defaults
     end
-    
+
     def derive(nu_defaults)
       self.class.new(nu_defaults, self)
+    end
+
+  private
+
+    def validate!(defaults = self.all_defaults)
+      if defaults[:rewrite] && !defaults[:rewrite].respond_to?(:call)
+        raise ArgumentError.new("Expected option :rewrite to respond to :call ( got: #{defaults[:rewrite].inspect} ).")
+      end
     end
   
   end
