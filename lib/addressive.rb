@@ -51,7 +51,14 @@ module Addressive
     
     def initialize(builder)
       @builder = builder
-      super("No URISpec found for #{builder.inspect}. Only got: #{builder.node.uri_specs.keys.map(&:inspect).join(', ')}")
+      super([
+        "No URISpec found for #{builder.inspect}. Only got:",
+        *builder.node.uri_specs.map{|key,specs|
+          ["\t#{key.inspect} :",
+            *specs.select{|spec| spec.valid? and spec.emit != false }.map{|spec| "\t\t#{spec.template.inspect}" }
+          ].join("\n")
+        }
+      ].join("\n"))
     end
   
   end
@@ -112,7 +119,7 @@ module Addressive
           action = path.last
         end
       end
-      derive_uri_builder(action, hashes.inject(self.variables || {}, &:merge), node)
+      derive_uri_builder(action, hashes.map{|hsh| Hash[hsh.map{|k,v| [k.to_s,v] }] }.inject(&:merge!), node)
     end
     
     private
@@ -168,7 +175,7 @@ module Addressive
     def uri_builder_specs
       return @specs ||= begin
         varnames = (self.variables || {} ).keys
-        self.node.uri_spec(self.action).select{|s| s.valid? and (s.variables - varnames).none? }.sort_by{|s| (varnames - s.variables).size }
+        self.node.uri_spec(self.action).select{|s| s.valid? and s.emit != false and (s.variables - varnames).none? }.sort_by{|s| (varnames - s.variables).size }
       end
     end
   end
@@ -185,7 +192,14 @@ module Addressive
     def variables
       @template ? @template.variables : []
     end
-    
+
+    def prefix!(with, op=:/)
+      return self unless valid?
+      @template = URITemplate.apply(with, op, @template )
+      return self
+    end
+
+
     def initialize(template, *args)
       @template = template
       super(*args)
@@ -205,11 +219,11 @@ module Addressive
     def converter(defaults = self.all_defaults)
       lambda{|spec|
         if spec.kind_of? URISpec
-          [ normalize( spec.dup, defaults ) ]
+          normalize( spec.dup, defaults )
         elsif spec.kind_of? URITemplate
-          [ normalize( URISpec.new( spec ) , defaults) ]
+          normalize( URISpec.new( spec ) , defaults)
         elsif spec.kind_of? String
-          [ normalize( URISpec.new( URITemplate.new(spec) ) , defaults) ]
+          normalize( URISpec.new( URITemplate.new(spec) ) , defaults)
         elsif spec.kind_of? Array
           spec.map(&self.converter(defaults))
         elsif spec.kind_of? Hash
@@ -227,13 +241,8 @@ module Addressive
       if defaults.key? :app 
         spec.app = defaults[:app]
       end
-      unless spec.template.absolute?
-        if defaults[:prefix]
-          spec.template = URITemplate.apply( defaults[:prefix] , :/ ,  spec.template)
-        end
-      end
       if defaults[:rewrite]
-        spec.template = defaults[:rewrite].call(spec.template)
+        spec = Array( defaults[:rewrite].call(spec) )
       end
       return spec
     end
@@ -377,7 +386,10 @@ module Addressive
   # @example
   #   node = Addressive.node do 
   #     edge( :another ) do
-  #       default :prefix, '/another'
+  #       default :rewrite, lambda{|spec|
+  #         spec.template = URITemplate.new('/another') / spec.template
+  #         spec
+  #       }
   #       uri '/'
   #     end
   #     uri '/'

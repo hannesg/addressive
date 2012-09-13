@@ -78,7 +78,7 @@ describe Addressive do
 
     it "should rewrite templates if requested" do
 
-      factory = Addressive::URISpecFactory.new(:rewrite => lambda{|tpl| URITemplate.new('/foo') } )
+      factory = Addressive::URISpecFactory.new(:rewrite => lambda{|spec| spec.template = URITemplate.new('/foo'); spec } )
 
       specs = factory.convert('/bar')
       specs.should have(1).item
@@ -202,9 +202,15 @@ describe Addressive do
         
         node :frontend do
         
-          app App.new('A'), :prefix => '{proto}://{host}/app_a'
+          app App.new('A'), :rewrite => lambda{|spec|
+            spec.template = URITemplate.new('{proto}://{host}/app_a') / spec.template
+            spec
+          }
           
-          app App.new('B'), :prefix => '{proto}://{host}/app_b'
+          app App.new('B'), :rewrite => lambda{|spec|
+            spec.template = URITemplate.new('{proto}://{host}/app_b') / spec.template
+            spec
+          }
           
           ref :backend
         
@@ -212,9 +218,15 @@ describe Addressive do
         
         node :backend do
         
-          app App.new('C'), :prefix => '{proto}://{host}/backend'
+          app App.new('C'), :rewrite => lambda{|spec|
+            spec.template = URITemplate.new('{proto}://{host}/backend') / spec.template
+            spec
+          }
           
-          app App.new('D'), :prefix => '{proto}://{host}/backend/{y}'
+          app App.new('D'), :rewrite => lambda{|spec|
+            spec.template = URITemplate.new('{proto}://{host}/backend/{y}') / spec.template
+            spec
+          }
         
         end
       
@@ -383,13 +395,21 @@ describe Addressive do
           
           edge :foo do
           
-            app Addressive::Static.new(:root=>File.join(File.dirname(__FILE__),'bar')), :prefix=>'/foo'
+            app Addressive::Static.new(:root=>File.join(File.dirname(__FILE__),'bar')),
+              :rewrite => lambda{|spec|
+                spec.template = URITemplate.new('/foo') / spec.template
+                spec
+              }
           
           end
           
           edge :bar do
           
-            app Addressive::Static.new(:root=>File.join(File.dirname(__FILE__),'bar')), :prefix=>'http://static.example.com/'
+            app Addressive::Static.new(:root=>File.join(File.dirname(__FILE__),'bar')),
+              :rewrite => lambda{|spec|
+                spec.template = URITemplate.new('http://static.example.com/') / spec.template
+                spec
+              }
           
           end
           
