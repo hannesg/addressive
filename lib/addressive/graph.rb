@@ -46,7 +46,12 @@ module Addressive
           args.unshift( name_or_uri )
         end
         specs = @node.uri_spec(name)
-        specs << @spec_factory.convert(*args)
+        if args.size > 1 && args.last.kind_of?(Hash)
+          options = args.pop
+          specs << @spec_factory.derive(options).convert(*args)
+        else
+          specs << @spec_factory.convert(*args)
+        end
         return specs
       end
     
@@ -109,7 +114,12 @@ module Addressive
           name = DEFAULT_ACTION
           args.unshift( name_or_uri )
         end
-        @node.uri_spec(name) << @spec_factory.convert(*args)
+        if args.size > 1 && args.last.kind_of?(Hash)
+          options = args.pop
+          @node.uri_spec(name) << @spec_factory.derive(options).convert(*args)
+        else
+          @node.uri_spec(name) << @spec_factory.convert(*args)
+        end
         return @node.uri_spec(name)
       end
       

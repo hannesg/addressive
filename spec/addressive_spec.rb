@@ -163,6 +163,42 @@ describe Addressive do
     end
   
   end
+
+  describe Addressive::Graph::NodeBuilder do
+
+    it "should allow overriding attributes" do
+
+      nd = Addressive.node{
+
+        uri '/foo', :app => :a
+
+      }
+
+      nd.uri_spec.first.app.should == :a
+
+    end
+
+  end
+
+  describe Addressive::Graph::AppBuilder do
+
+    it "should allow overriding attributes" do
+
+      nd = Addressive.node{
+
+        app :b do
+
+          uri '/bar', :app => :a
+
+        end
+
+      }
+
+      nd.uri_spec.first.app.should == :a
+
+    end
+
+  end
   
   describe Addressive::Router do
   
