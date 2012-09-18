@@ -239,7 +239,7 @@ module Addressive
   
     def normalize( spec, defaults = self.all_defaults )
       if defaults.key? :app 
-        spec.app = defaults[:app]
+        spec.app ||= defaults[:app]
       end
       if defaults[:rewrite]
         spec = Array( defaults[:rewrite].call(spec) )
