@@ -12,7 +12,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-#    (c) 2011 by Hannes Georg
+#    (c) 2011 - 2012 by Hannes Georg
 #
 
 module Addressive
@@ -21,38 +21,22 @@ module Addressive
   # Graphs are only used to generate nodes and their relations.
   # They will be GCed when they are done.
   class Graph
-    
+
+    require 'addressive/graph/builds_uris'
+
     # An app builder is used to add uris for a certain app to a node.
     class AppBuilder
-    
+
+      include BuildsURIs
+
+      attr :spec_factory, :node
+
       # @private
       def initialize(node, factory, app)
         @node = node
         @app = app
         @spec_factory = factory
-      end
-      
-      # Sets a default value for an option.
-      def default(name, value)
-        @spec_factory.defaults[name] = value
-      end
-      
-      # Adds one or more uri specs for a given name. It uses the current app as the default app for all specs.
-      def uri(name_or_uri,*args)
-        if name_or_uri.kind_of? Symbol
-          name = name_or_uri
-        else
-          name = DEFAULT_ACTION
-          args.unshift( name_or_uri )
-        end
-        specs = @node.uri_spec(name)
-        if args.size > 1 && args.last.kind_of?(Hash)
-          options = args.pop
-          specs << @spec_factory.derive(options).convert(*args)
-        else
-          specs << @spec_factory.convert(*args)
-        end
-        return specs
+        @stack = []
       end
     
     end
@@ -60,9 +44,11 @@ module Addressive
     # A NodeBuilder is used to build a Node inside a Graph.
     # This class should not be generated directly, it's created for you by {Builder#node}.
     class NodeBuilder
-  
-      attr_reader :node
-      
+
+      include BuildsURIs
+
+      attr :spec_factory, :node
+
       # @private
       def initialize(network,node)
         @network = network
@@ -100,28 +86,6 @@ module Addressive
       end
       
       alias ref edge
-      
-      # Sets a default value for an option.
-      def default(name, value)
-        @spec_factory.defaults[name] = value
-      end
-      
-      # Adds one or more uri specs for a given name.
-      def uri(name_or_uri,*args)
-        if name_or_uri.kind_of? Symbol
-          name = name_or_uri
-        else
-          name = DEFAULT_ACTION
-          args.unshift( name_or_uri )
-        end
-        if args.size > 1 && args.last.kind_of?(Hash)
-          options = args.pop
-          @node.uri_spec(name) << @spec_factory.derive(options).convert(*args)
-        else
-          @node.uri_spec(name) << @spec_factory.convert(*args)
-        end
-        return @node.uri_spec(name)
-      end
       
       # Adds an rack-application to this node.
       #
@@ -164,7 +128,9 @@ module Addressive
         end
         return builder
       end
-      
+
+      alias run app
+
     end
   
     # A Builder is used to construct a network.
