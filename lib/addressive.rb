@@ -199,6 +199,9 @@ module Addressive
       return self
     end
 
+    def set_unless(key, value)
+      send("#{key}=".to_sym, send(key) || value)
+    end
 
     def initialize(template, *args)
       @template = template
@@ -238,8 +241,8 @@ module Addressive
     protected :converter
   
     def normalize( spec, defaults = self.all_defaults )
-      if defaults.key? :app 
-        spec.app ||= defaults[:app]
+      defaults.each do |key,value|
+        spec.set_unless( key, value)
       end
       if defaults[:rewrite]
         spec = Array( defaults[:rewrite].call(spec) )

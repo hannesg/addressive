@@ -198,6 +198,25 @@ describe Addressive do
 
     end
 
+    it "should support middleware" do
+
+      nd = Addressive.node{
+
+        app :b do
+
+          use ->(env,app){ app.call(env) }
+
+          uri '/bar', :app => :a
+
+        end
+
+      }
+
+      nd.uri_spec.first.callback.should respond_to(:call)
+      nd.uri_spec.first.callback.should_not == nd.uri_spec.first.app
+
+    end
+
   end
   
   describe Addressive::Router do

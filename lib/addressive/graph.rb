@@ -23,20 +23,41 @@ module Addressive
   class Graph
 
     require 'addressive/graph/builds_uris'
+    require 'addressive/graph/middleware'
 
     # An app builder is used to add uris for a certain app to a node.
     class AppBuilder
 
       include BuildsURIs
 
-      attr :spec_factory, :node
+      attr :spec_factory, :node, :defaults
 
       # @private
       def initialize(node, factory, app)
         @node = node
         @app = app
         @spec_factory = factory
-        @stack = []
+        @callback = nil
+        @defaults = {}
+        @middleware = Middleware::End
+      end
+
+      def spec_factory_with_options(overrides)
+        if overrides.key? :app
+          cb = @middleware.unwind(overrides[:app])
+        else
+          cb = (@callback ||= @middleware.unwind(@app))
+        end
+        super( {:callback => cb}.merge(overrides) )
+      end
+
+      def use(middleware, *args, &block)
+        if middleware.respond_to? :call
+          @middleware <<= proc{|app| proc{|env| middleware.call(env, app, *args, &block) } }
+        else
+          @middleware <<= proc{|app| middleware.new(app,*args, &block) }
+        end
+        @callback = nil
       end
     
     end
@@ -47,13 +68,14 @@ module Addressive
 
       include BuildsURIs
 
-      attr :spec_factory, :node
+      attr :spec_factory, :node, :defaults
 
       # @private
       def initialize(network,node)
         @network = network
         @node = node
-        @spec_factory = network.spec_factory.derive({})
+        @defaults = {}
+        @spec_factory = network.spec_factory
       end
       
       # Adds an edge from the current node to a node with the given name.

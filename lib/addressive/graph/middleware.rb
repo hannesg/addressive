@@ -15,33 +15,24 @@
 #    (c) 2011 - 2012 by Hannes Georg
 #
 
-module Addressive; module Graph::BuildsURIs
+module Addressive; class Graph::Middleware
 
-  # Adds one or more uri specs for a given name.
-  def uri(name_or_uri,*args)
-    if name_or_uri.kind_of? Symbol
-      name = name_or_uri
-    else
-      name = DEFAULT_ACTION
-      args.unshift( name_or_uri )
-    end
-    specs = node.uri_spec(name)
-    options = {}
-    if args.size > 1 && args.last.kind_of?(Hash)
-      options = args.pop
-    end
-    specs << spec_factory_with_options(options).convert(*args)
-    return specs
+  def initialize(proc, rest = End)
+    @proc, @rest = proc, rest
   end
 
-
-  def spec_factory_with_options(overrides={})
-    return spec_factory.derive( defaults.merge(overrides) )
+  def unwind(app)
+    @proc.call( @rest.unwind(app) )
   end
 
-  # Sets a default value for an option.
-  def default(name, value)
-    defaults[name] = value
+  def <<(proc)
+    self.class.new(proc, self)
   end
 
-end; end
+  End = self.new(nil,nil)
+
+  def End.unwind(app)
+    return app
+  end
+
+end ; end

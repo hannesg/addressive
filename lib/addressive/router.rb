@@ -235,7 +235,7 @@ module Addressive
       matches.each do |addressive|
         env[ADDRESSIVE_ENV_KEY] = addressive
         begin
-          result = addressive.spec.app.call(env)
+          result = (addressive.spec.callback || addressive.spec.app).call(env)
           db.call(DEBUG_NAME) do
             "[#{result[0]}] #{addressive.spec.template.pattern} with #{addressive.variables.inspect} on #{addressive.spec.app} ( route #{addressive.data[:'routes.scanned']} / #{addressive.data[:'routes.total']} ) after #{'%.6f' % addressive.data[:duration]}"
           end
