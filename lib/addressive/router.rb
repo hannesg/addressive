@@ -57,7 +57,7 @@ module Addressive
           @routes = []
         end
       
-        def preroute(path, uri)
+        def preroute(*_)
           return self
         end
         
@@ -75,21 +75,25 @@ module Addressive
         
         def done!
           # compile *gnihihi*
-          code = ( ['def each(path,uri); routes = Enumerator.new(@routes);'] +
+          code = ( 
+            ['def each(proto,host,path)',
+              'routes = Enumerator.new(@routes)',
+              'host_path = host + path; proto_host_path = proto + host + path'] +
             @routes.each_with_index.map{|r,i|
               "route = routes.next
-              vars = route.template.extract(#{r.template.absolute? ? 'uri' : 'path'})
+              vars = route.template.extract(#{r.template.scheme? ? 'proto_host_path' : (r.template.host? ? 'host_path' : 'path')})
               if vars
                 yield( route, vars, #{i+1} )
               end
               "
-            } + [ '; end']).join
+            } + [ 'end']).join("\n")
           instance_eval(code)
         end
         
-        def each(path,uri)
+        def each(proto,host,path)
+          host_path = host + path; proto_host_path = proto + host + path
           @routes.each_with_index do |route,i|
-            vars = route.template.extract(route.template.absolute? ? uri : path)
+            vars = route.template.extract(route.template.scheme? ? proto_host_path : (route.template.host? ? host_path : path) )
             if vars
               yield( route, vars, i )
             end
@@ -106,8 +110,8 @@ module Addressive
           @partitions = partitions
         end
         
-        def preroute(path,uri)
-          @partitions[ uri.include?(@substring) ? 0 : 1 ].preroute(uri,path)
+        def preroute(proto,host,path)
+          @partitions[ (host+path).include?(@substring) ? 0 : 1 ].preroute(proto,host,path)
         end
         
         def <<(spec)
@@ -140,8 +144,8 @@ module Addressive
           @partitions = partitions
         end
         
-        def preroute(path,uri)
-          @partitions[ path.start_with?(@prefix) ? 0 : 1 ].preroute(uri,path)
+        def preroute(proto, host, path)
+          @partitions[ path.start_with?(@prefix) ? 0 : 1 ].preroute(proto, host, path)
         end
         
         def <<(spec)
@@ -263,15 +267,15 @@ module Addressive
       include Enumerable
     
       # @private
-      def initialize(routes,path,url,actions)
-        @routes,@path,@url,@actions = routes, path, url, actions
+      def initialize(routes,proto,host,path,actions)
+        @routes,@proto,@host,@path,@actions = routes, proto, host,path, actions
       end
       
       # @yield {Addressive::Match}
       def each
         total = @routes.size
         scan_time = Time.now
-        @routes.each(@path,@url) do |spec, vars, scanned|
+        @routes.each(@proto,@host,@path) do |spec, vars, scanned|
           node, action = @actions[spec];
           t = Time.now
           yield Match.new(node, action, vars, spec, {:'routes.scanned'=>scanned,:'routes.total'=>total,:duration => (t - scan_time)})
@@ -282,14 +286,19 @@ module Addressive
       end
     
     end
-    
+
+    URI_SPLITTER = %r{\A([a-z]+:)(//[^/\n]+)(/[^\n]+)\z}
+
     #
     # @param path String the path to look for
     # @param uri String the full uri
     # @return {RouteEnumerator} an enumerator which yields the requested routes
-    def routes_for(path, uri)
+    def routes_for(path=nil, uri)
+      _, *parts = URI_SPLITTER.match(uri).to_a
+      raise ArgumentError.new("Expected a valid URI but got #{uri.inspect}") if parts.size != 3
+      parts.map!(&:to_s)
       materialize!
-      return RouteEnumerator.new(@tree.preroute(path,uri),path,uri,@actions)
+      return RouteEnumerator.new(@tree.preroute(*parts),*parts,@actions)
     end
     
     # @private
