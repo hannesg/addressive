@@ -288,12 +288,9 @@ describe Addressive do
       }[:frontend]
       
       router = Addressive::Router.new
-      
       router.add(nd)
       router.add(nd.edges[:backend])
-      
       app = Rack::MockRequest.new(router)
-      
       app.get('http://www.example.com/app_a/show/3').body.should == 'A - show'
 
       app.get('http://www.example.com/app_a/').body.should == 'A - default'
@@ -511,15 +508,17 @@ describe Addressive do
       router.add @main
       router.add @main.edges[:foo]
       router.add @main.edges[:bar]
-      
+            l = Logger.new(STDOUT)
+      l.level = Logger::DEBUG
+ 
       str = ''
       sio = StringIO.new(str)
       
-      f1 = Rack::MockRequest.new(router).get( 'http://foo.bar/foo/../afile.ext' )
-      f1.status.should >= 400
+      f1 = Rack::MockRequest.new(router).get( 'http://foo.bar/foo/../afile.ext', 'rack.logger' => l )
+      f1.body.should_not == 'B'
       
       f1 = Rack::MockRequest.new(router).get( 'http://foo.bar/foo/%2e%2e/afile.ext' )
-      f1.status.should >= 400
+      f1.body.should_not == 'B'
     
     end
     

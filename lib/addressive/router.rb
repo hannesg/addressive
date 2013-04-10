@@ -37,8 +37,6 @@ module Addressive
       # @private
       class Direct < self
       
-        Enumerator = defined?(::Enumerator) ? ::Enumerator : Enumerable::Enumerator
-
         class EachingProc < Proc
         
           def initialize(routes)
@@ -77,7 +75,7 @@ module Addressive
           # compile *gnihihi*
           code = ( 
             ['def each(proto,host,path)',
-              'routes = Enumerator.new(@routes)',
+              'routes = @routes.to_enum',
               'host_path = host + path; proto_host_path = proto + host + path'] +
             @routes.each_with_index.map{|r,i|
               "route = routes.next

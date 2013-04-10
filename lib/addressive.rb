@@ -207,6 +207,14 @@ module Addressive
       @template = template
       super(*args)
     end
+
+    def hash
+      @template.hash ^ super
+    end
+
+    def ==(other)
+      @template == other.template && super
+    end
     
     def inspect
       ( ['#<',self.class.name,': ',template.inspect ] + @table.map{|k,v| " #{k}=#{v.inspect}"} + ['>'] ).join
