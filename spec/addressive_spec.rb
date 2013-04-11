@@ -508,13 +508,11 @@ describe Addressive do
       router.add @main
       router.add @main.edges[:foo]
       router.add @main.edges[:bar]
-            l = Logger.new(STDOUT)
-      l.level = Logger::DEBUG
  
       str = ''
       sio = StringIO.new(str)
       
-      f1 = Rack::MockRequest.new(router).get( 'http://foo.bar/foo/../afile.ext', 'rack.logger' => l )
+      f1 = Rack::MockRequest.new(router).get( 'http://foo.bar/foo/../afile.ext' )
       f1.body.should_not == 'B'
       
       f1 = Rack::MockRequest.new(router).get( 'http://foo.bar/foo/%2e%2e/afile.ext' )
