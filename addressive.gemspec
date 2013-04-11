@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name = 'addressive'
-  s.version = '0.1.0.alpha'
-  s.date = '2011-11-23'
+  s.version = '0.1.0'
+  s.date = Time.now.strftime('%Y-%m-%d')
   s.authors = ["HannesG"]
   s.email = %q{hannes.georg@googlemail.com}
   s.summary = 'A system which should help bringing different Rack applications together.'
